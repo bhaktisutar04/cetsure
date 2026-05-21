@@ -4,3 +4,12 @@ sqlalchemy==2.0.49
 psycopg2-binary==2.9.12
 python-dotenv==1.2.2
 pydantic==2.13.4
+requests
+pdfplumber
+pandas>=2.2.0
+sqlalchemy
+psycopg2-binary
+thefuzz
+python-levenshtein
+tqdm
+python-dotenv

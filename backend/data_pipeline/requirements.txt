@@ -1,9 +1,0 @@
-requests
-pdfplumber
-pandas>=2.2.0
-sqlalchemy
-psycopg2-binary
-thefuzz
-python-levenshtein
-tqdm
-python-dotenv
