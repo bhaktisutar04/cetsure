@@ -1,0 +1,39 @@
+"""
+predict.py — FastAPI router for prediction endpoint (F3)
+"""
+
+from fastapi import APIRouter, HTTPException, status
+from backend.schemas.predict import PredictRequest, PredictResponse
+from backend.prediction.predict import predict
+
+router = APIRouter(tags=["prediction"])
+
+
+@router.post(
+    "/predict",
+    response_model=PredictResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Predict college admission chances",
+    description="Takes a student's MHT-CET percentile, reservation category, branch interest, and optional filters, and yields a categorised Safe / Moderate / Reach list of matching colleges.",
+)
+async def get_prediction(req: PredictRequest):
+    try:
+        res = predict(
+            percentile=req.percentile,
+            category=req.category,
+            branch=req.branch,
+            district=req.district,
+            quota=req.quota,
+        )
+        return res
+    except ValueError as ve:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(ve),
+        )
+    except Exception as e:
+        # Provide clean logging or detail
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database prediction error: {str(e)}",
+        )

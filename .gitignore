@@ -1,0 +1,28 @@
+# Environment files — never push these
+.env
+*.env
+# Large data folders — no need in GitHub
+backend/data_pipeline/raw_pdfs/
+backend/data_pipeline/extracted/
+backend/data_pipeline/cleaned/
+backend/data_pipeline/logs/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Spec kit memory (contains personal session data)
+.specify/
+.claude/
+
+# OS files
+.DS_Store
+Thumbs.db
