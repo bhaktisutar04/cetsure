@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="CETSure — Know exactly which Maharashtra engineering college you'll get based on 4 years of official MAHACET data."/>
+  <title>CETSure — Know Your College Before CAP Round</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    /* ── Landing-page-only overrides ──────────────────────── */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /*
+      Outer shell: full-viewport centering wrapper.
+      On desktop this creates the "mobile column centred
+      with dark space on both sides" effect.
+    */
+    .landing-shell {
+      position: relative;
+      width: 100%;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;   /* centres the 480px column */
+      align-items: stretch;
+    }
+
+    /*
+      The hero column — max 480px, left-aligned content inside.
+      position: relative so the float-area is anchored to it.
+    */
+    .hero {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 28px 120px;
+      overflow: hidden;           /* clip floating cards to this column */
+    }
+
+    /* ── Hero typography ──────────────────────────────────── */
+    .hero-logo { margin-bottom: 40px; }
+    .hero-logo img { height: 32px; }
+
+    .hero-headline {
+      font-family: var(--font-heading);
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-headline span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 36px;
+      max-width: 300px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 320px;
+    }
+
+    /* ── Trust pills ──────────────────────────────────────── */
+    .trust-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .trust-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--safe);
+      flex-shrink: 0;
+    }
+
+    /* ── Floating cards ───────────────────────────────────
+       Anchored to the .hero column (position:relative),
+       NOT to the viewport. Positioned in the right half
+       of the 480px column.
+    ─────────────────────────────────────────────────────── */
+    .float-area {
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-55%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Left-to-right gradient fades the cards into the text */
+    .float-fade {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 55%;
+      background: linear-gradient(to right, var(--primary) 30%, transparent 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── Scroll hint ──────────────────────────────────────── */
+    .scroll-hint {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: bounce 2s ease-in-out infinite;
+      z-index: 10;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(6px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="dot-grid"></div>
+
+  <!-- Full-width centering shell -->
+  <div class="landing-shell">
+
+    <!-- 480px hero column -->
+    <main class="hero" role="main">
+
+      <!-- Gradient fade (scoped inside .hero now) -->
+      <div class="float-fade"></div>
+
+      <!-- Floating preview cards (scoped inside .hero) -->
+      <div class="float-area" aria-hidden="true">
+        <div class="float-card">
+          <div class="float-card__college">COEP Pune</div>
+          <div class="float-card__branch">Computer Engineering</div>
+          <div class="float-card__row">
+            <span class="float-card__pct">97.84</span>
+            <span class="badge badge-safe">SAFE</span>
+          </div>
+        </div>
+        <div class="float-card">
+          <div class="float-card__college">PICT Pune</div>
+          <div class="float-card__branch">IT Engineering</div>
+          <div class="float-card__row">
+            <span class="float-card__pct">96.21</span>
+            <span class="badge badge-moderate">MODERATE</span>
+          </div>
+        </div>
+        <div class="float-card">
+          <div class="float-card__college">VJTI Mumbai</div>
+          <div class="float-card__branch">Computer Engineering</div>
+          <div class="float-card__row">
+            <span class="float-card__pct">98.12</span>
+            <span class="badge badge-reach">REACH</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero content (z-index above cards) -->
+      <div style="position:relative; z-index:3;">
+        <div class="hero-logo">
+          <img src="assets/logo.svg" alt="CETSure" width="120"/>
+        </div>
+
+        <h1 class="hero-headline">
+          Know exactly<br/>
+          which college<br/>
+          <span>you'll get.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Based on 4 years of official MAHACET data.<br/>
+          Free. Accurate. Instant.
+        </p>
+
+        <div class="hero-cta">
+          <a href="signup.html" class="btn btn-primary btn-primary--full"
+             id="cta-check-colleges" style="font-size:17px; height:58px;">
+            Check My Colleges
+            <svg width="18" height="18" fill="none" stroke="currentColor"
+                 stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </a>
+          <div class="trust-row">
+            <div class="trust-pill">
+              <span class="trust-dot"></span>
+              225,000+ cutoff records
+            </div>
+            <div class="trust-pill">Free forever</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /.landing-shell -->
+
+  <div class="scroll-hint" aria-hidden="true">
+    <svg width="16" height="16" fill="none" stroke="currentColor"
+         stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </div>
+</body>
+</html>

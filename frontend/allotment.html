@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="Update your college allotment result — help improve CETSure predictions."/>
+  <title>Update Allotment — CETSure</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="dot-grid"></div>
+
+  <main class="page">
+    <div class="page-header">
+      <a onclick="history.back()" class="back-btn" style="cursor:pointer;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </a>
+      <div>
+        <h1 class="page-title">Update Allotment</h1>
+        <p class="text-xs text-muted" style="margin-top:2px;">Tell us which college you got</p>
+      </div>
+    </div>
+
+    <div class="px-20" style="padding-top:24px; position:relative; z-index:1;">
+
+      <!-- Form -->
+      <div id="form-section">
+        <div class="card mb-20">
+          <p class="text-sm text-muted" style="line-height:1.7;">
+            🎉 Got your allotment? Let us know!<br/>
+            Your data helps thousands of future students get more accurate predictions.
+          </p>
+        </div>
+
+        <form id="allotment-form" novalidate>
+
+          <!-- College search -->
+          <div class="form-group search-wrapper">
+            <label class="form-label" for="allot-college">College Name</label>
+            <svg class="search-icon" style="top:70%;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input class="form-input search-input" type="search" id="allot-college"
+                   placeholder="Search college name…" autocomplete="off"/>
+            <div id="college-suggestions" style="
+              position:absolute; top:100%; left:0; right:0; z-index:10;
+              background:var(--surface-2); border:1px solid var(--border);
+              border-radius:var(--radius-sm); max-height:200px; overflow-y:auto; display:none;">
+            </div>
+          </div>
+
+          <!-- Branch -->
+          <div class="form-group">
+            <label class="form-label" for="allot-branch">Branch</label>
+            <select class="form-select" id="allot-branch" required>
+              <option value="" disabled selected>Select branch</option>
+              <option>Computer Engineering</option>
+              <option>Computer Science and Engineering</option>
+              <option>Information Technology</option>
+              <option>Artificial Intelligence and Data Science</option>
+              <option>Electronics Engineering</option>
+              <option>Electronics and Telecommunication Engg</option>
+              <option>Mechanical Engineering</option>
+              <option>Civil Engineering</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <!-- CAP Round -->
+          <div class="form-group">
+            <label class="form-label">CAP Round</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="cap-round" value="1" id="cap1" checked/>
+                <span class="radio-label">Round 1</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="cap-round" value="2" id="cap2"/>
+                <span class="radio-label">Round 2</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="cap-round" value="3" id="cap3"/>
+                <span class="radio-label">Round 3</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-primary--full" style="height:56px; font-size:16px; margin-top:8px;">
+            Submit Allotment
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Thank you state (hidden until submit) -->
+      <div id="thankyou-section" style="display:none;">
+        <div class="thankyou-card">
+          <div class="thankyou-icon">🎓</div>
+          <h2 class="font-heading">Congratulations!</h2>
+          <p>Thank you for sharing your allotment. Your data helps us improve predictions for future students.</p>
+          <a href="home.html" class="btn btn-primary" style="margin-top:28px; width:100%; max-width:280px; justify-content:center;">
+            Go to Home
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    protectPage();
+    loadNavbar();
+
+    // College search autocomplete (live search)
+    const collegeInput = document.getElementById('allot-college');
+    const suggestions  = document.getElementById('college-suggestions');
+    let suggestTimer   = null;
+    let selectedCollege = null;
+
+    collegeInput.addEventListener('input', () => {
+      const q = collegeInput.value.trim();
+      clearTimeout(suggestTimer);
+      if (q.length < 2) { suggestions.style.display = 'none'; return; }
+
+      suggestTimer = setTimeout(async () => {
+        try {
+          const data = await searchColleges(q);
+          const list = data.results || [];
+          if (list.length === 0) { suggestions.style.display = 'none'; return; }
+          suggestions.innerHTML = list.slice(0, 8).map(c => `
+            <div style="padding:12px 16px; cursor:pointer; font-size:14px;
+              border-bottom:1px solid var(--border); transition:background 0.15s;"
+              class="suggestion-item"
+              data-code="${escAttr(c.college_code)}" data-name="${escAttr(c.college_name)}">
+              ${escHtml(c.college_name)}
+            </div>`).join('');
+          suggestions.style.display = 'block';
+
+          suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('mousedown', () => {
+              collegeInput.value    = item.dataset.name;
+              selectedCollege       = { code: item.dataset.code, name: item.dataset.name };
+              suggestions.style.display = 'none';
+            });
+            item.addEventListener('mouseover', () => item.style.background = 'var(--surface)');
+            item.addEventListener('mouseout',  () => item.style.background = 'transparent');
+          });
+        } catch {}
+      }, 300);
+    });
+
+    collegeInput.addEventListener('blur', () => {
+      setTimeout(() => { suggestions.style.display = 'none'; }, 200);
+    });
+
+    // Form submit
+    document.getElementById('allotment-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const college  = selectedCollege?.name || collegeInput.value.trim();
+      const branch   = document.getElementById('allot-branch').value;
+      const capRound = document.querySelector('input[name="cap-round"]:checked')?.value;
+
+      if (!college) { showToast('Please enter your college name.', 'error'); return; }
+      if (!branch)  { showToast('Please select your branch.', 'error'); return; }
+
+      const allotment = { college, collegeCode: selectedCollege?.code, branch, capRound, ts: Date.now() };
+      localStorage.setItem('cetsure_allotment', JSON.stringify(allotment));
+
+      // Show thank you
+      document.getElementById('form-section').style.display     = 'none';
+      document.getElementById('thankyou-section').style.display = 'block';
+      launchConfetti();
+    });
+
+    function launchConfetti() {
+      const colours = ['#F5A623','#10B981','#3B82F6','#F59E0B','#EF4444','#8B5CF6'];
+      for (let i = 0; i < 40; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left  = Math.random() * 100 + 'vw';
+        el.style.top   = '-20px';
+        el.style.background = colours[Math.floor(Math.random() * colours.length)];
+        el.style.animationDelay    = (Math.random() * 1.5) + 's';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        el.style.width  = (6 + Math.random() * 8) + 'px';
+        el.style.height = (6 + Math.random() * 8) + 'px';
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+    }
+
+    function escHtml(str) {
+      return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function escAttr(str) {
+      return String(str||'').replace(/"/g,'&quot;');
+    }
+  </script>
+</body>
+</html>

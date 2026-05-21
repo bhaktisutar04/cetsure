@@ -92,76 +92,155 @@ def _get_engine():
 # ---------------------------------------------------------------------------
 # Database query
 # ---------------------------------------------------------------------------
+# def fetch_cutoff_data(
+#     category: str,
+#     branch: str,
+#     quota: str = "MH",
+#     engine=None,
+# ) -> list[dict]:
+#     """
+#     Query the cutoffs table for matching records.
+
+#     If the input branch matches a common branch alias (case-insensitive),
+#     performs a precise multi-value match using the SQL IN clause.
+#     Otherwise, falls back to the standard partial LIKE search.
+#     """
+#     if engine is None:
+#         engine = _get_engine()
+
+#     branch_lower = branch.strip().lower()
+#     matched_alias = None
+
+#     for alias_key, alias_values in BRANCH_ALIASES.items():
+#         if alias_key == branch_lower:
+#             matched_alias = alias_values
+#             break
+
+#     if matched_alias:
+#         # Case-insensitive IN matching by lowercasing alias names
+#         lower_aliases = [val.lower() for val in matched_alias]
+#         query = text("""
+#             SELECT college_code, college_name, branch_name,
+#                    year, closing_percentile
+#             FROM cutoffs
+#             WHERE category = :category
+#             AND quota = :quota
+#             AND cap_round = 1
+#             AND LOWER(branch_name) IN :aliases
+#             AND closing_percentile IS NOT NULL
+#             ORDER BY college_code, year
+#         """)
+#         params = {
+#             "category": category,
+#             "quota": quota,
+#             "aliases": tuple(lower_aliases),
+#         }
+#     else:
+#         # Partial match fallback
+#         branch_pattern = f"%{branch}%"
+#         query = text("""
+#             SELECT college_code, college_name, branch_name,
+#                    year, closing_percentile
+#             FROM cutoffs
+#             WHERE category = :category
+#             AND quota = :quota
+#             AND cap_round = 1
+#             AND LOWER(branch_name) LIKE LOWER(:branch)
+#             AND closing_percentile IS NOT NULL
+#             ORDER BY college_code, year
+#         """)
+#         params = {
+#             "category": category,
+#             "quota": quota,
+#             "branch": branch_pattern,
+#         }
+
+#     with engine.connect() as conn:
+#         result = conn.execute(query, params)
+#         rows = [dict(row._mapping) for row in result]
+
+#     return rows
+
 def fetch_cutoff_data(
     category: str,
     branch: str,
     quota: str = "MH",
+    district: str = None,
     engine=None,
 ) -> list[dict]:
     """
-    Query the cutoffs table for matching records.
-
-    If the input branch matches a common branch alias (case-insensitive),
-    performs a precise multi-value match using the SQL IN clause.
-    Otherwise, falls back to the standard partial LIKE search.
+    Optimized query for prediction.
+    Filters branch/category/quota/cap_round in SQL.
+    Also filters district in SQL when provided.
     """
     if engine is None:
         engine = _get_engine()
 
     branch_lower = branch.strip().lower()
-    matched_alias = None
 
-    for alias_key, alias_values in BRANCH_ALIASES.items():
-        if alias_key == branch_lower:
-            matched_alias = alias_values
-            break
-
-    if matched_alias:
-        # Case-insensitive IN matching by lowercasing alias names
-        lower_aliases = [val.lower() for val in matched_alias]
-        query = text("""
-            SELECT college_code, college_name, branch_name,
-                   year, closing_percentile
-            FROM cutoffs
-            WHERE category = :category
-            AND quota = :quota
-            AND cap_round = 1
-            AND LOWER(branch_name) IN :aliases
-            AND closing_percentile IS NOT NULL
-            ORDER BY college_code, year
-        """)
+    if branch_lower in ("other", "all branches", "all"):
+        branch_condition = ""
         params = {
             "category": category,
             "quota": quota,
-            "aliases": tuple(lower_aliases),
         }
     else:
-        # Partial match fallback
-        branch_pattern = f"%{branch}%"
-        query = text("""
-            SELECT college_code, college_name, branch_name,
-                   year, closing_percentile
-            FROM cutoffs
-            WHERE category = :category
-            AND quota = :quota
-            AND cap_round = 1
-            AND LOWER(branch_name) LIKE LOWER(:branch)
-            AND closing_percentile IS NOT NULL
-            ORDER BY college_code, year
-        """)
-        params = {
-            "category": category,
-            "quota": quota,
-            "branch": branch_pattern,
-        }
+        matched_alias = None
+        for alias_key, alias_values in BRANCH_ALIASES.items():
+            if alias_key == branch_lower:
+                matched_alias = alias_values
+                break
+
+        if matched_alias:
+            alias_params = {}
+            placeholders = []
+            for idx, alias in enumerate(matched_alias):
+                key = f"alias_{idx}"
+                alias_params[key] = alias.lower()
+                placeholders.append(f":{key}")
+
+            branch_condition = f"""
+                AND LOWER(branch_name) IN ({", ".join(placeholders)})
+            """
+            params = {
+                "category": category,
+                "quota": quota,
+                **alias_params,
+            }
+        else:
+            branch_condition = """
+                AND LOWER(branch_name) LIKE LOWER(:branch)
+            """
+            params = {
+                "category": category,
+                "quota": quota,
+                "branch": f"%{branch}%",
+            }
+
+    district_condition = ""
+    if district and district != "All Maharashtra":
+        district_condition = """
+            AND LOWER(college_name) LIKE LOWER(:district)
+        """
+        params["district"] = f"%{district}%"
+
+    query = text(f"""
+        SELECT college_code, college_name, branch_name,
+               year, closing_percentile
+        FROM cutoffs
+        WHERE category = :category
+          AND quota = :quota
+          AND cap_round = 1
+          AND closing_percentile IS NOT NULL
+          {branch_condition}
+          {district_condition}
+        ORDER BY college_code, branch_name, year
+        LIMIT 2000
+    """)
 
     with engine.connect() as conn:
         result = conn.execute(query, params)
-        rows = [dict(row._mapping) for row in result]
-
-    return rows
-
-
+        return [dict(row._mapping) for row in result]
 
 # ---------------------------------------------------------------------------
 # Weighted cutoff calculation
@@ -336,10 +415,12 @@ def predict(
         )
 
     # --- Fetch data from DB ---
+    
     rows = fetch_cutoff_data(
-        category=category,
-        branch=branch,
-        quota=quota,
+    category=category,
+    branch=branch,
+    quota=quota,
+    district=district,
     )
 
     # --- Group by college ---
