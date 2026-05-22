@@ -218,11 +218,11 @@ def fetch_cutoff_data(
             }
 
     district_condition = ""
-    if district and district != "All Maharashtra":
-        district_condition = """
-            AND LOWER(college_name) LIKE LOWER(:district)
-        """
-        params["district"] = f"%{district}%"
+    # if district and district != "All Maharashtra":
+    #     district_condition = """
+    #         AND LOWER(college_name) LIKE LOWER(:district)
+    #     """
+    #     params["district"] = f"%{district}%"
 
     query = text(f"""
         SELECT college_code, college_name, branch_name,
@@ -433,8 +433,8 @@ def predict(
 
     for _key, college in college_groups.items():
         # Apply district filter
-        if not _matches_district(college["college_name"], district):
-            continue
+        # if not _matches_district(college["college_name"], district):
+        #     continue
 
         year_pcts = college["year_percentiles"]
 
