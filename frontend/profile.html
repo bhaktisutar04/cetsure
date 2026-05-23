@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Profile Setup - CETSure</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <div class="container page">
+
+        <div class="card">
+
+            <h1>Profile Setup</h1>
+
+            <p>
+                Complete your student profile.
+            </p>
+
+            <form id="profileForm">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+
+                    <input type="text" id="fullName" placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label>MHT-CET Percentile</label>
+
+                    <input type="number" id="percentile" placeholder="Enter your percentile" min="0" max="100"
+                        step="0.01" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                        <option value="GOPENS">OPEN</option>
+                        <option value="GOBCS">OBC</option>
+                        <option value="GSCS">SC</option>
+                        <option value="GSTS">ST</option>
+                        <option value="GVJS">VJ</option>
+                        <option value="GNT1S">NT1</option>
+                        <option value="GNT2S">NT2</option>
+                        <option value="GNT3S">NT3</option>
+                        <option value="GSEBCS">SEBC</option>
+                        <option value="EWS">EWS</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">
+                    Save Profile
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        requireAuth();
+
+        // Prefill existing profile if available
+        const existingProfile = getProfile();
+
+        if (existingProfile) {
+            document.getElementById("fullName").value =
+                existingProfile.fullName || "";
+
+            document.getElementById("percentile").value =
+                existingProfile.percentile || "";
+
+            document.getElementById("category").value =
+                existingProfile.category || "";
+        }
+
+        const profileForm = document.getElementById("profileForm");
+
+        profileForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const profileData = {
+                fullName: document.getElementById("fullName").value.trim(),
+                percentile: parseFloat(
+                    document.getElementById("percentile").value
+                ),
+                category: document.getElementById("category").value,
+            };
+
+            saveProfile(profileData);
+
+            goTo(ROUTES.HOME);
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Results - CETSure</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card fade-up">
+
+      <button class="secondary-btn" onclick="goTo(ROUTES.PREDICT)">
+        ← Try Again
+      </button>
+
+      <h1>Your Results</h1>
+
+      <div id="metaInfo" class="subtitle"></div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-number" id="safeCount">0</div>
+          <div class="stat-label">Safe</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-number" id="moderateCount">0</div>
+          <div class="stat-label">Moderate</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-number" id="reachCount">0</div>
+          <div class="stat-label">Reach</div>
+        </div>
+      </div>
+
+      <div id="resultsContainer"></div>
+      <div class="disclaimer-box">
+        <strong>Note:</strong>
+        These predictions are based on previous cutoff trends.
+        Final admission depends on official CAP rounds, seat availability,
+        category rules, and student preferences.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    requireAuth();
+
+    const results = getPredictionResults();
+
+    if (!results) {
+      showMessage("No prediction results found.");
+      goTo(ROUTES.PREDICT);
+    }
+
+    const safe = results.safe || [];
+    const moderate = results.moderate || [];
+    const reach = results.reach || [];
+
+    document.getElementById("safeCount").innerText = safe.length;
+    document.getElementById("moderateCount").innerText = moderate.length;
+    document.getElementById("reachCount").innerText = reach.length;
+
+    document.getElementById("metaInfo").innerHTML = `
+    <strong>${results.meta.branch}</strong><br>
+    ${results.meta.category} • ${results.meta.percentile} percentile • 
+    ${results.meta.district || "All Maharashtra"}
+  `;
+
+    const resultsContainer = document.getElementById("resultsContainer");
+
+    function badgeClass(bucket) {
+      if (bucket === "SAFE") return "safe";
+      if (bucket === "MODERATE") return "moderate";
+      return "reach";
+    }
+
+    function saveCollege(college) {
+      let saved = JSON.parse(localStorage.getItem(getShortlistKey())) || [];
+
+      const exists = saved.find(
+        (item) =>
+          item.college_code === college.college_code &&
+          item.branch_name === college.branch_name
+      );
+
+      if (exists) {
+        showMessage("This college is already in your shortlist.");
+        return;
+      }
+
+      saved.push(college);
+      localStorage.setItem(getShortlistKey(), JSON.stringify(saved));
+      showMessage("College saved to shortlist.");
+    }
+
+    function saveCollegeByIndex(bucket, index) {
+      let college = null;
+
+      if (bucket === "SAFE") {
+        college = safe[index];
+      } else if (bucket === "MODERATE") {
+        college = moderate[index];
+      } else {
+        college = reach[index];
+      }
+
+      if (!college) {
+        showMessage("Unable to save this college.");
+        return;
+      }
+
+      saveCollege(college);
+    }
+
+    function openCollegeDetails(code) {
+      localStorage.setItem("cetsure_selected_college", code);
+      goTo("college.html");
+    }
+
+    function renderSection(title, colleges, bucket) {
+      let html = `
+      <div class="results-section">
+        <h2 class="section-title">${title} (${colleges.length})</h2>
+    `;
+
+      if (!colleges.length) {
+        html += `
+        <div class="empty-state">
+          No colleges found in this section.
+        </div>
+      </div>`;
+        resultsContainer.innerHTML += html;
+        return;
+      }
+
+      colleges.forEach((college, index) => {
+        html += `
+        <div class="college-card fade-up">
+
+          <span class="badge ${badgeClass(bucket)}">
+            ${bucket}
+          </span>
+
+          <div class="college-name">
+            ${college.college_name}
+          </div>
+
+          <div class="college-detail">
+            📍 ${college.district || "-"}
+          </div>
+
+          <div class="college-detail">
+            🎓 ${college.branch_name}
+          </div>
+
+          <div class="college-detail">
+            📊 Predicted cutoff:
+            <strong>${college.weighted_cutoff}</strong>
+          </div>
+
+          <div class="college-detail">
+            🕒 Last year cutoff:
+            <strong>${college.last_year_cutoff || "-"}</strong>
+          </div>
+
+          <div class="college-detail">
+            ⭐ Chance score:
+            <strong>${college.chance_score}%</strong>
+          </div>
+
+          <div class="college-detail">
+            📈 Trend:
+            <strong>${college.trend}</strong>
+          </div>
+
+          <p class="subtitle" style="text-align:left; margin-top:12px;">
+            ${college.reason}
+          </p>
+
+          <button
+            class="primary-btn"
+            onclick="saveCollegeByIndex('${bucket}', ${index})"
+          >
+            Save to Shortlist
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="openCollegeDetails('${college.college_code}')"
+          >
+            View Details
+          </button>
+
+        </div>
+      `;
+      });
+
+      html += `</div>`;
+      resultsContainer.innerHTML += html;
+    }
+
+    renderSection("Safe Colleges", safe, "SAFE");
+    renderSection("Moderate Colleges", moderate, "MODERATE");
+    renderSection("Reach Colleges", reach, "REACH");
+  </script>
+
+</body>
+
+</html>

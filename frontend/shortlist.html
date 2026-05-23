@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Shortlist - CETSure</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card fade-up">
+
+      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)">
+        ← Back Home
+      </button>
+
+      <h1>My Shortlist</h1>
+
+      <p class="subtitle">
+        Arrange your saved colleges in option form priority order.
+      </p>
+
+      <button class="primary-btn" onclick="goTo('compare.html')">
+        Compare Colleges
+      </button>
+
+      <button class="secondary-btn" onclick="exportPDF()">
+        Export Option Form PDF
+      </button>
+
+      <div id="shortlistContainer"></div>
+
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    requireAuth();
+
+    const shortlistContainer =
+      document.getElementById("shortlistContainer");
+
+    function getShortlist() {
+      return JSON.parse(localStorage.getItem(getShortlistKey())) || [];
+    }
+
+    function saveShortlist(list) {
+      localStorage.setItem(getShortlistKey(), JSON.stringify(list));
+    }
+
+    function removeCollege(index) {
+      const list = getShortlist();
+      list.splice(index, 1);
+      saveShortlist(list);
+      loadShortlist();
+    }
+
+    function moveUp(index) {
+      if (index === 0) return;
+
+      const list = getShortlist();
+
+      const temp = list[index - 1];
+      list[index - 1] = list[index];
+      list[index] = temp;
+
+      saveShortlist(list);
+      loadShortlist();
+    }
+
+    function moveDown(index) {
+      const list = getShortlist();
+
+      if (index === list.length - 1) return;
+
+      const temp = list[index + 1];
+      list[index + 1] = list[index];
+      list[index] = temp;
+
+      saveShortlist(list);
+      loadShortlist();
+    }
+
+    function exportPDF() {
+      window.print();
+    }
+
+    function loadShortlist() {
+      const saved = getShortlist();
+
+      if (!saved.length) {
+        shortlistContainer.innerHTML = `
+        <div class="empty-state">
+          No colleges saved yet.
+        </div>
+      `;
+        return;
+      }
+
+      let html = `
+      <div class="results-section">
+        <h2 class="section-title">
+          Option Form Priority (${saved.length})
+        </h2>
+    `;
+
+      saved.forEach((college, index) => {
+        html += `
+        <div class="college-card">
+
+          <span class="badge safe">
+            Priority ${index + 1}
+          </span>
+
+          <div class="college-name">
+            ${college.college_name}
+          </div>
+
+          <div class="college-detail">
+            🎓 ${college.branch_name}
+          </div>
+
+          <div class="college-detail">
+            📍 ${college.district || "-"}
+          </div>
+
+          <div class="college-detail">
+            📊 Predicted cutoff:
+            <strong>${college.weighted_cutoff || "-"}</strong>
+          </div>
+
+          <div class="college-detail">
+            ⭐ Chance score:
+            <strong>${college.chance_score || "-"}%</strong>
+          </div>
+
+          <button
+            class="secondary-btn"
+            onclick="moveUp(${index})"
+          >
+            ↑ Move Up
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="moveDown(${index})"
+          >
+            ↓ Move Down
+          </button>
+
+          <button
+            class="danger-btn"
+            onclick="removeCollege(${index})"
+          >
+            Remove
+          </button>
+
+        </div>
+      `;
+      });
+
+      html += `
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Note:</strong>
+        This option form is only for personal planning.
+        Final CAP option form must be filled on the official admission portal.
+      </div>
+    `;
+
+      shortlistContainer.innerHTML = html;
+    }
+
+    loadShortlist();
+  </script>
+
+</body>
+
+</html>

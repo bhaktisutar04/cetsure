@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Predict Colleges - CETSure</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card fade-up">
+
+            <h1>Find My Colleges</h1>
+
+            <p class="subtitle">
+                Get personalized engineering college predictions.
+            </p>
+
+            <form id="predictionForm">
+
+                <label>Preferred Branch</label>
+
+                <select id="branch" required>
+                    <option value="Computer Engineering">Computer Engineering</option>
+                    <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                    <option value="Artificial Intelligence (AI) and Data Science">Artificial Intelligence (AI) and Data Science</option>
+                    <option value="Artificial Intelligence and Machine Learning">Artificial Intelligence and Machine Learning</option>
+                    <option value="Electronics and Telecommunication Engg">Electronics and Telecommunication Engg</option>
+                    <option value="Electronics Engineering">Electronics Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Computer Science and Engineering(Data Science)">Computer Science and Engineering(Data Science)</option>
+                    <option value="Automation and Robotics">Automation and Robotics</option>
+                </select>
+
+                <label>Preferred District</label>
+
+                <select id="district">
+                    <option value="">All Maharashtra</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Nagpur">Nagpur</option>
+                    <option value="Nashik">Nashik</option>
+                    <option value="Amravati">Amravati</option>
+                    <option value="Kolhapur">Kolhapur</option>
+                    <option value="Satara">Satara</option>
+                    <option value="Sangli">Sangli</option>
+                    <option value="Solapur">Solapur</option>
+                    <option value="Ahmednagar">Ahmednagar</option>
+                    <option value="Aurangabad">Aurangabad</option>
+                    <option value="Thane">Thane</option>
+                    <option value="Palghar">Palghar</option>
+                    <option value="Raigad">Raigad</option>
+                    <option value="Jalgaon">Jalgaon</option>
+                    <option value="Dhule">Dhule</option>
+                    <option value="Nandurbar">Nandurbar</option>
+                    <option value="Buldhana">Buldhana</option>
+                    <option value="Akola">Akola</option>
+                    <option value="Wardha">Wardha</option>
+                    <option value="Yavatmal">Yavatmal</option>
+                    <option value="Bhandara">Bhandara</option>
+                    <option value="Chandrapur">Chandrapur</option>
+                    <option value="Ratnagiri">Ratnagiri</option>
+                    <option value="Sindhudurg">Sindhudurg</option>
+                    <option value="Beed">Beed</option>
+                    <option value="Latur">Latur</option>
+                    <option value="Nanded">Nanded</option>
+                    <option value="Parbhani">Parbhani</option>
+                    <option value="Jalna">Jalna</option>
+                    <option value="Dharashiv">Dharashiv</option>
+                    <option value="Gondia">Gondia</option>
+                    <option value="Gadchiroli">Gadchiroli</option>
+                    <option value="Washim">Washim</option>
+                    <option value="Hingoli">Hingoli</option>
+                    <option value="Osmanabad">Osmanabad</option>
+                </select>
+
+                <button type="submit" id="predictBtn" class="primary-btn">
+                    Find Colleges
+                </button>
+
+            </form>
+
+            <div id="loadingBox" class="loading-box hidden">
+                <div class="loader"></div>
+
+                <p>
+                    Analyzing cutoff trends and finding best colleges for you...
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        requireAuth();
+        requireProfile();
+
+        const profile = getProfile();
+
+        const form = document.getElementById("predictionForm");
+
+        const predictBtn = document.getElementById("predictBtn");
+
+        const loadingBox = document.getElementById("loadingBox");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            predictBtn.disabled = true;
+            predictBtn.innerText = "Predicting...";
+
+            loadingBox.classList.remove("hidden");
+
+            try {
+
+                const payload = {
+                    percentile: profile.percentile,
+                    category: profile.category,
+                    branch: document.getElementById("branch").value,
+                    district: document.getElementById("district").value
+                };
+
+                const results = await predictColleges(payload);
+
+                savePredictionResults(results);
+
+                goTo("results.html");
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(error.message);
+
+                predictBtn.disabled = false;
+                predictBtn.innerText = "Find Colleges";
+
+                loadingBox.classList.add("hidden");
+            }
+        });
+    </script>
+
+</body>
+
+</html>

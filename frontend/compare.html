@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compare Colleges - CETSure</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card fade-up">
+
+            <button class="secondary-btn" onclick="goTo('shortlist.html')">
+                ← Back to Shortlist
+            </button>
+
+            <h1>Compare Colleges</h1>
+
+            <p class="subtitle">
+                Compare your shortlisted colleges side by side.
+            </p>
+
+            <div class="form-group">
+                <label>First College</label>
+                <select id="collegeOne"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Second College</label>
+                <select id="collegeTwo"></select>
+            </div>
+
+            <button class="primary-btn" onclick="compareColleges()">
+                Compare
+            </button>
+
+            <div id="comparisonResult" class="results-section"></div>
+
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        requireAuth();
+
+        const shortlist =
+            JSON.parse(localStorage.getItem(getShortlistKey())) || [];
+
+        const collegeOne = document.getElementById("collegeOne");
+        const collegeTwo = document.getElementById("collegeTwo");
+
+        function loadOptions() {
+            if (shortlist.length < 2) {
+                document.getElementById("comparisonResult").innerHTML = `
+        <div class="empty-state">
+          Save at least 2 colleges to compare.
+        </div>
+      `;
+                return;
+            }
+
+            shortlist.forEach((college, index) => {
+                const optionText =
+                    `${college.college_name} - ${college.branch_name}`;
+
+                collegeOne.innerHTML += `
+        <option value="${index}">
+          ${optionText}
+        </option>
+      `;
+
+                collegeTwo.innerHTML += `
+        <option value="${index}">
+          ${optionText}
+        </option>
+      `;
+            });
+
+            collegeTwo.value = shortlist.length > 1 ? 1 : 0;
+        }
+
+        function compareColleges() {
+            const firstIndex = collegeOne.value;
+            const secondIndex = collegeTwo.value;
+
+            if (firstIndex === secondIndex) {
+                showMessage("Please select two different colleges.");
+                return;
+            }
+
+            const first = shortlist[firstIndex];
+            const second = shortlist[secondIndex];
+
+            document.getElementById("comparisonResult").innerHTML = `
+      <div class="stats-grid">
+
+        <div class="college-card">
+          <span class="badge safe">College 1</span>
+
+          <div class="college-name">
+            ${first.college_name}
+          </div>
+
+          <div class="college-detail">
+            🎓 ${first.branch_name}
+          </div>
+
+          <div class="college-detail">
+            📍 ${first.district || "-"}
+          </div>
+
+          <div class="college-detail">
+            📊 Cutoff:
+            <strong>${first.weighted_cutoff || "-"}</strong>
+          </div>
+
+          <div class="college-detail">
+            ⭐ Chance:
+            <strong>${first.chance_score || "-"}%</strong>
+          </div>
+        </div>
+
+        <div class="college-card">
+          <span class="badge moderate">College 2</span>
+
+          <div class="college-name">
+            ${second.college_name}
+          </div>
+
+          <div class="college-detail">
+            🎓 ${second.branch_name}
+          </div>
+
+          <div class="college-detail">
+            📍 ${second.district || "-"}
+          </div>
+
+          <div class="college-detail">
+            📊 Cutoff:
+            <strong>${second.weighted_cutoff || "-"}</strong>
+          </div>
+
+          <div class="college-detail">
+            ⭐ Chance:
+            <strong>${second.chance_score || "-"}%</strong>
+          </div>
+        </div>
+
+      </div>
+    `;
+        }
+
+        loadOptions();
+    </script>
+
+</body>
+
+</html>
