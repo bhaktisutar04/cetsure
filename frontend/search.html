@@ -5,7 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Search Colleges - CETSure</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -13,22 +19,30 @@
   <div class="container">
     <div class="card fade-up">
 
-      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)">
-        ← Back Home
+      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)" style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+        &larr; Back Home
       </button>
 
-      <h1>Search Colleges</h1>
+      <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">Search Cutoffs</h1>
 
-      <p class="subtitle">
-        Search by college name or college code.
+      <p class="subtitle" style="font-size: var(--text-sm); margin-bottom: var(--sp-6);">
+        Lookup official DTE engineering college codes and locations.
       </p>
 
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom: var(--sp-2);">
         <label>College Name / Code</label>
-        <input type="text" id="searchInput" placeholder="Example: COEP, 6006, Pune" />
+        <input type="text" id="searchInput" placeholder="Example: COEP, VJTI, 6006" />
       </div>
 
-      <button class="primary-btn" onclick="handleSearch()">
+      <div style="font-size: 11px; margin-bottom: var(--sp-5); display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+        <span style="color: var(--c-text-muted);">Try:</span>
+        <span onclick="document.getElementById('searchInput').value='COEP'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">COEP</span>
+        <span onclick="document.getElementById('searchInput').value='VJTI'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">VJTI</span>
+        <span onclick="document.getElementById('searchInput').value='PICT'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">PICT</span>
+        <span onclick="document.getElementById('searchInput').value='6006'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">Code 6006</span>
+      </div>
+
+      <button class="primary-btn" onclick="handleSearch()" style="margin-top: 0;">
         Search
       </button>
 
@@ -59,7 +73,7 @@
         return;
       }
 
-      resultsBox.innerHTML = `<div class="empty-state">Searching...</div>`;
+      resultsBox.innerHTML = `<div class="empty-state">Searching database...</div>`;
 
       try {
         const data = await searchColleges(query);
@@ -68,30 +82,31 @@
         if (!colleges.length) {
           resultsBox.innerHTML = `
           <div class="empty-state">
-            No colleges found.
+            No colleges found matching "${query}".
           </div>
         `;
           return;
         }
 
-        let html = `<h2 class="section-title">Results (${colleges.length})</h2>`;
+        let html = `<h2 class="section-title">Found (${colleges.length})</h2>`;
 
         colleges.forEach((college) => {
           html += `
-          <div class="college-card">
-            <div class="college-name">
-              ${college.college_name}
+          <div class="college-card fade-up" style="display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4);">
+            <div style="flex:1;">
+              <div class="college-name" style="margin-bottom: 4px; font-size: var(--text-base);">
+                ${college.college_name}
+              </div>
+              <div class="college-detail" style="margin: 0; font-size: var(--text-xs);">
+                Code: <strong>${college.college_code}</strong>
+              </div>
             </div>
-
-            <div class="college-detail">
-              College Code: <strong>${college.college_code}</strong>
-            </div>
-
             <button
               class="primary-btn"
               onclick="openCollege('${college.college_code}')"
+              style="margin: 0; width: auto; min-height: 40px; height: 40px; padding: 0 var(--sp-4); font-size: var(--text-xs);"
             >
-              View Details
+              View &rarr;
             </button>
           </div>
         `;

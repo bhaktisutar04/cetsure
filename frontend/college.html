@@ -5,7 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>College Details - CETSure</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -13,16 +19,16 @@
   <div class="container">
     <div class="card fade-up">
 
-      <button class="secondary-btn" onclick="goTo('search.html')">
-        ← Back to Search
+      <button class="secondary-btn" onclick="goTo('search.html')" style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+        &larr; Back to Search
       </button>
 
-      <h1 id="collegeName">College Details</h1>
+      <h1 id="collegeName" class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4); font-size: var(--text-xl);">College Details</h1>
 
-      <p class="subtitle" id="collegeCode"></p>
+      <p class="subtitle" id="collegeCode" style="margin-bottom: var(--sp-4); font-size: var(--text-sm);"></p>
 
-      <button class="primary-btn" onclick="saveCollegeFromDetails()">
-        Save College
+      <button class="primary-btn" onclick="saveCollegeFromDetails()" style="margin-top: 0; margin-bottom: var(--sp-5);">
+        ❤️ Save to Shortlist
       </button>
 
       <div id="collegeDetails">
@@ -78,41 +84,36 @@
 
         let html = `
         <div class="results-section">
-          <h2 class="section-title">Cutoff History</h2>
+          <h2 class="section-title" style="margin-top: 0;">Cutoff History</h2>
       `;
 
         cutoffs.slice(0, 50).forEach((item) => {
           html += `
-          <div class="college-card">
-
-            <div class="college-name">
+          <div class="college-card fade-up" style="padding: var(--sp-4); margin-bottom: var(--sp-3); border-left: 4px solid var(--c-primary-border);">
+            <div class="college-name" style="font-size: var(--text-base); margin-bottom: var(--sp-2);">
               ${item.branch_name}
             </div>
-
-            <span class="badge safe">
-              ${item.year}
-            </span>
-
-            <div class="college-detail">
-              Category:
-              <strong>${item.category}</strong>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; margin-bottom: var(--sp-3);">
+              <span class="badge safe" style="margin-bottom:0; font-size:9px; padding: 2px 6px; background: var(--c-primary-surf); color: var(--c-primary); border-color: var(--c-primary-border);">
+                Year ${item.year}
+              </span>
+              <span style="font-size: 10px; font-weight: var(--fw-semibold); color: var(--c-text-secondary); background: var(--c-surface-alt); padding: 2px 6px; border-radius: var(--r-sm); border: 1px solid var(--c-border);">
+                Round ${item.cap_round}
+              </span>
+              <span style="font-size: 10px; font-weight: var(--fw-semibold); color: var(--c-accent-hover); background: var(--c-accent-surf); padding: 2px 6px; border-radius: var(--r-sm); border: 1px solid var(--c-accent-border);">
+                Category: ${item.category}
+              </span>
             </div>
 
-            <div class="college-detail">
-              CAP Round:
-              <strong>${item.cap_round}</strong>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); font-size: var(--text-sm);">
+              <div class="college-detail" style="margin:0;">
+                📊 Percentile: <strong style="color: var(--c-text);">${item.closing_percentile || "-"}</strong>
+              </div>
+              <div class="college-detail" style="margin:0;">
+                🏅 Rank: <strong style="color: var(--c-text);">${item.closing_rank || "-"}</strong>
+              </div>
             </div>
-
-            <div class="college-detail">
-              Closing Percentile:
-              <strong>${item.closing_percentile || "-"}</strong>
-            </div>
-
-            <div class="college-detail">
-              Closing Rank:
-              <strong>${item.closing_rank || "-"}</strong>
-            </div>
-
           </div>
         `;
         });

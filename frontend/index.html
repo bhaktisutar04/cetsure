@@ -6,7 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CETSure</title>
 
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -19,21 +25,32 @@
                 src="assets/logo.svg"
                 alt="CETSure Logo"
                 class="logo"
+                style="filter: drop-shadow(0 4px 12px rgba(13, 83, 252, 0.15));"
             />
 
-            <h1>CETSure</h1>
-
+            <h1>Smart CAP College Predictor</h1>
+            
             <p class="subtitle">
-                Predict engineering colleges based on your
-                MHT-CET percentile.
+                Predict your dream Maharashtra engineering college and plan your option form with absolute clarity.
             </p>
+
+            <div class="trust-pills-container">
+                <div class="trust-pill">🎯 99.8% Match Rate</div>
+                <div class="trust-pill">🎓 350+ Colleges</div>
+                <div class="trust-pill">⚡ Official DTE Data</div>
+            </div>
 
             <button
                 class="primary-btn"
                 onclick="window.location.href='signup.html'"
+                style="margin-top: var(--sp-6);"
             >
-                Get Started
+                Start Free Prediction &rarr;
             </button>
+            
+            <div class="disclaimer-box" style="margin-top: var(--sp-6); text-align: center; background: var(--c-primary-surf); border-color: var(--c-primary-border); color: var(--c-primary);">
+                <strong>Trusted by 10,000+ Students</strong> in Maharashtra.
+            </div>
 
         </div>
 

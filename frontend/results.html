@@ -5,7 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Results - CETSure</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -13,33 +20,40 @@
   <div class="container">
     <div class="card fade-up">
 
-      <button class="secondary-btn" onclick="goTo(ROUTES.PREDICT)">
-        ← Try Again
+      <button class="secondary-btn" onclick="goTo(ROUTES.PREDICT)"
+        style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+        &larr; Try Again
       </button>
 
-      <h1>Your Results</h1>
+      <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">Your Predictions
+      </h1>
+      <div class="prediction-note">
+        CETSure predicts CAP Round 1 chances using previous CAP Round 1 cutoff trends.
+      </div>
 
-      <div id="metaInfo" class="subtitle"></div>
+      <div id="metaInfo" class="subtitle"
+        style="font-size: var(--text-sm); font-weight: var(--fw-semibold); color: var(--c-text-secondary); margin-bottom: var(--sp-6);">
+      </div>
 
       <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-number" id="safeCount">0</div>
-          <div class="stat-label">Safe</div>
+        <div class="stat-box safe" style="border-radius: var(--r-md); border-width: 1px;">
+          <div class="stat-number" id="safeCount" style="color: var(--c-safe-text);">0</div>
+          <div class="stat-label" style="color: var(--c-safe-text);">Safe</div>
         </div>
 
-        <div class="stat-box">
-          <div class="stat-number" id="moderateCount">0</div>
-          <div class="stat-label">Moderate</div>
+        <div class="stat-box moderate" style="border-radius: var(--r-md); border-width: 1px;">
+          <div class="stat-number" id="moderateCount" style="color: var(--c-moderate-text);">0</div>
+          <div class="stat-label" style="color: var(--c-moderate-text);">Moderate</div>
         </div>
 
-        <div class="stat-box">
-          <div class="stat-number" id="reachCount">0</div>
-          <div class="stat-label">Reach</div>
+        <div class="stat-box reach" style="border-radius: var(--r-md); border-width: 1px;">
+          <div class="stat-number" id="reachCount" style="color: var(--c-reach-text);">0</div>
+          <div class="stat-label" style="color: var(--c-reach-text);">Reach</div>
         </div>
       </div>
 
       <div id="resultsContainer"></div>
-      <div class="disclaimer-box">
+      <div class="disclaimer-box" style="margin-top: var(--sp-6);">
         <strong>Note:</strong>
         These predictions are based on previous cutoff trends.
         Final admission depends on official CAP rounds, seat availability,
@@ -148,8 +162,9 @@
       }
 
       colleges.forEach((college, index) => {
+        const bucketClassLower = badgeClass(bucket).toLowerCase();
         html += `
-        <div class="college-card fade-up">
+        <div class="college-card fade-up ${bucketClassLower}">
 
           <span class="badge ${badgeClass(bucket)}">
             ${bucket}
@@ -159,51 +174,53 @@
             ${college.college_name}
           </div>
 
-          <div class="college-detail">
-            📍 ${college.district || "-"}
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-3);">
+            <div class="college-detail" style="margin:0;">
+              📍 ${college.district || "-"}
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              🎓 ${college.branch_name}
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              📊 Predicted: <strong>${college.weighted_cutoff}</strong>
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              🕒 Last Year: <strong>${college.last_year_cutoff || "-"}</strong>
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              ⭐ Chance: <strong style="color: var(--c-${bucketClassLower}-text);">${college.chance_score}%</strong>
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              📈 Trend: <strong>${college.trend}</strong>
+            </div>
           </div>
 
-          <div class="college-detail">
-            🎓 ${college.branch_name}
+          <div style="text-align: left; margin-top: 10px; font-size: var(--text-xs); color: var(--c-text-secondary); background: var(--c-surface-alt); border-radius: var(--r-sm); padding: var(--sp-3); border-left: 3px solid var(--c-${bucketClassLower}-border); line-height: 1.45;">
+            💡 <strong>Counselor Tip:</strong> ${college.reason}
           </div>
 
-          <div class="college-detail">
-            📊 Predicted cutoff:
-            <strong>${college.weighted_cutoff}</strong>
+          <div style="display: flex; gap: var(--sp-2); margin-top: var(--sp-3);">
+            <button
+              class="primary-btn"
+              onclick="saveCollegeByIndex('${bucket}', ${index})"
+              style="margin:0; flex:1; min-height: 44px; padding: 10px var(--sp-2); font-size: var(--text-xs);"
+            >
+              Save List
+            </button>
+
+            <button
+              class="secondary-btn"
+              onclick="openCollegeDetails('${college.college_code}')"
+              style="margin:0; flex:1; min-height: 44px; padding: 10px var(--sp-2); font-size: var(--text-xs);"
+            >
+              Details &rarr;
+            </button>
           </div>
-
-          <div class="college-detail">
-            🕒 Last year cutoff:
-            <strong>${college.last_year_cutoff || "-"}</strong>
-          </div>
-
-          <div class="college-detail">
-            ⭐ Chance score:
-            <strong>${college.chance_score}%</strong>
-          </div>
-
-          <div class="college-detail">
-            📈 Trend:
-            <strong>${college.trend}</strong>
-          </div>
-
-          <p class="subtitle" style="text-align:left; margin-top:12px;">
-            ${college.reason}
-          </p>
-
-          <button
-            class="primary-btn"
-            onclick="saveCollegeByIndex('${bucket}', ${index})"
-          >
-            Save to Shortlist
-          </button>
-
-          <button
-            class="secondary-btn"
-            onclick="openCollegeDetails('${college.college_code}')"
-          >
-            View Details
-          </button>
 
         </div>
       `;

@@ -2,9 +2,10 @@
 predict.py — FastAPI router for prediction endpoint (F3)
 """
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from backend.schemas.predict import PredictRequest, PredictResponse
 from backend.prediction.predict import predict
+from backend.auth.firebase_auth import get_current_user
 
 router = APIRouter(tags=["prediction"])
 
@@ -16,7 +17,7 @@ router = APIRouter(tags=["prediction"])
     summary="Predict college admission chances",
     description="Takes a student's MHT-CET percentile, reservation category, branch interest, and optional filters, and yields a categorised Safe / Moderate / Reach list of matching colleges.",
 )
-async def get_prediction(req: PredictRequest):
+async def get_prediction(req: PredictRequest, current_user: dict = Depends(get_current_user)):
     try:
         res = predict(
             percentile=req.percentile,

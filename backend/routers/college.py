@@ -2,10 +2,11 @@
 college.py — FastAPI router for college endpoints (F3)
 """
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, status, Depends
 from sqlalchemy import text
 from backend.schemas.college import CollegeDetailResponse, CollegeSearchResponse, CutoffDetail, CollegeSearchResult
 from backend.prediction.predict import _get_engine
+from backend.auth.firebase_auth import get_current_user
 
 router = APIRouter(tags=["college"])
 
@@ -17,7 +18,7 @@ router = APIRouter(tags=["college"])
     summary="Get college details and historical cutoffs",
     description="Returns the full profile and historical allotment cutoff records for a given unique college code.",
 )
-async def get_college_details(college_code: str):
+async def get_college_details(college_code: str, current_user: dict = Depends(get_current_user)):
     try:
         engine = _get_engine()
         query = text("""
@@ -76,7 +77,10 @@ async def get_college_details(college_code: str):
     summary="Search colleges by name or code",
     description="Enables searching and autocompleting colleges by name or unique college code.",
 )
-async def search_colleges(q: str = Query(..., min_length=2, description="Search query string (minimum 2 characters)")):
+async def search_colleges(
+    q: str = Query(..., min_length=2, description="Search query string (minimum 2 characters)"),
+    current_user: dict = Depends(get_current_user)
+):
     try:
         engine = _get_engine()
         

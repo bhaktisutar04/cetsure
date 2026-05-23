@@ -5,7 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Compare Colleges - CETSure</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -13,28 +19,30 @@
     <div class="container">
         <div class="card fade-up">
 
-            <button class="secondary-btn" onclick="goTo('shortlist.html')">
-                ← Back to Shortlist
+            <button class="secondary-btn" onclick="goTo('shortlist.html')" style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+                &larr; Back to Shortlist
             </button>
 
-            <h1>Compare Colleges</h1>
+            <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">Compare Colleges</h1>
 
-            <p class="subtitle">
-                Compare your shortlisted colleges side by side.
+            <p class="subtitle" style="font-size: var(--text-sm); margin-bottom: var(--sp-6);">
+                Compare your saved options side by side to finalize priority choices.
             </p>
 
-            <div class="form-group">
-                <label>First College</label>
-                <select id="collegeOne"></select>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-4);">
+                <div class="form-group" style="margin: 0;">
+                    <label>First College Choice</label>
+                    <select id="collegeOne" style="min-height: 48px; padding: 12px;"></select>
+                </div>
+
+                <div class="form-group" style="margin: 0;">
+                    <label>Second College Choice</label>
+                    <select id="collegeTwo" style="min-height: 48px; padding: 12px;"></select>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Second College</label>
-                <select id="collegeTwo"></select>
-            </div>
-
-            <button class="primary-btn" onclick="compareColleges()">
-                Compare
+            <button class="primary-btn" onclick="compareColleges()" style="margin-top: var(--sp-2);">
+                Compare Choices &rarr;
             </button>
 
             <div id="comparisonResult" class="results-section"></div>
@@ -102,57 +110,57 @@
             const second = shortlist[secondIndex];
 
             document.getElementById("comparisonResult").innerHTML = `
-      <div class="stats-grid">
+      <div class="stats-grid" style="grid-template-columns: 1fr; margin-top: var(--sp-6);">
 
-        <div class="college-card">
-          <span class="badge safe">College 1</span>
+        <div class="college-card fade-up" style="border-left: 5px solid var(--c-primary); padding: var(--sp-5);">
+          <span class="badge safe" style="background: var(--c-primary-surf); color: var(--c-primary); border-color: var(--c-primary-border);">
+            Option A
+          </span>
 
-          <div class="college-name">
+          <div class="college-name" style="font-size: var(--text-md); margin-bottom: var(--sp-4);">
             ${first.college_name}
           </div>
 
           <div class="college-detail">
-            🎓 ${first.branch_name}
+            🎓 Branch: <strong style="color: var(--c-text);">${first.branch_name}</strong>
           </div>
 
           <div class="college-detail">
-            📍 ${first.district || "-"}
+            📍 District: <strong style="color: var(--c-text);">${first.district || "-"}</strong>
           </div>
 
           <div class="college-detail">
-            📊 Cutoff:
-            <strong>${first.weighted_cutoff || "-"}</strong>
+            📊 Predicted Cutoff: <strong style="color: var(--c-primary);">${first.weighted_cutoff || "-"}</strong>
           </div>
 
           <div class="college-detail">
-            ⭐ Chance:
-            <strong>${first.chance_score || "-"}%</strong>
+            ⭐ Match Chance: <strong style="color: var(--c-safe-text);">${first.chance_score || "-"}%</strong>
           </div>
         </div>
 
-        <div class="college-card">
-          <span class="badge moderate">College 2</span>
+        <div class="college-card fade-up" style="border-left: 5px solid var(--c-accent); padding: var(--sp-5);">
+          <span class="badge moderate" style="background: var(--c-accent-surf); color: var(--c-accent-hover); border-color: var(--c-accent-border);">
+            Option B
+          </span>
 
-          <div class="college-name">
+          <div class="college-name" style="font-size: var(--text-md); margin-bottom: var(--sp-4);">
             ${second.college_name}
           </div>
 
           <div class="college-detail">
-            🎓 ${second.branch_name}
+            🎓 Branch: <strong style="color: var(--c-text);">${second.branch_name}</strong>
           </div>
 
           <div class="college-detail">
-            📍 ${second.district || "-"}
+            📍 District: <strong style="color: var(--c-text);">${second.district || "-"}</strong>
           </div>
 
           <div class="college-detail">
-            📊 Cutoff:
-            <strong>${second.weighted_cutoff || "-"}</strong>
+            📊 Predicted Cutoff: <strong style="color: var(--c-primary);">${second.weighted_cutoff || "-"}</strong>
           </div>
 
           <div class="college-detail">
-            ⭐ Chance:
-            <strong>${second.chance_score || "-"}%</strong>
+            ⭐ Match Chance: <strong style="color: var(--c-safe-text);">${second.chance_score || "-"}%</strong>
           </div>
         </div>
 

@@ -5,7 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Shortlist - CETSure</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -13,23 +19,25 @@
   <div class="container">
     <div class="card fade-up">
 
-      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)">
-        ← Back Home
+      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)" style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+        &larr; Back Home
       </button>
 
-      <h1>My Shortlist</h1>
+      <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">My Option Form</h1>
 
-      <p class="subtitle">
-        Arrange your saved colleges in option form priority order.
+      <p class="subtitle" style="font-size: var(--text-sm); margin-bottom: var(--sp-4);">
+        Arrange saved colleges in order of preference to plan your DTE option list.
       </p>
 
-      <button class="primary-btn" onclick="goTo('compare.html')">
-        Compare Colleges
-      </button>
+      <div style="display: flex; gap: var(--sp-2); margin-top: var(--sp-4); margin-bottom: var(--sp-5);">
+        <button class="primary-btn" onclick="goTo('compare.html')" style="margin:0; flex:1; min-height:46px; height:46px; font-size:var(--text-sm);">
+          📊 Compare Colleges
+        </button>
 
-      <button class="secondary-btn" onclick="exportPDF()">
-        Export Option Form PDF
-      </button>
+        <button class="secondary-btn" onclick="exportPDF()" style="margin:0; flex:1; min-height:46px; height:46px; font-size:var(--text-sm);">
+          🖨️ Export PDF List
+        </button>
+      </div>
 
       <div id="shortlistContainer"></div>
 
@@ -101,69 +109,72 @@
       if (!saved.length) {
         shortlistContainer.innerHTML = `
         <div class="empty-state">
-          No colleges saved yet.
+          No colleges saved to your shortlist yet. Find colleges to start planning.
         </div>
       `;
         return;
       }
 
       let html = `
-      <div class="results-section">
-        <h2 class="section-title">
-          Option Form Priority (${saved.length})
-        </h2>
+      <div class="results-section" style="margin-top: 0;">
+        <h2 class="section-title" style="margin-top: 0;">Priority List (${saved.length})</h2>
     `;
 
       saved.forEach((college, index) => {
         html += `
-        <div class="college-card">
+        <div class="college-card fade-up" style="border-left: 5px solid var(--c-primary); padding: var(--sp-4);">
 
-          <span class="badge safe">
-            Priority ${index + 1}
+          <span class="badge safe" style="background: var(--c-primary-surf); color: var(--c-primary); border-color: var(--c-primary-border);">
+            Choice #${index + 1}
           </span>
 
-          <div class="college-name">
+          <div class="college-name" style="font-size: var(--text-base); margin-bottom: var(--sp-3);">
             ${college.college_name}
           </div>
 
-          <div class="college-detail">
-            🎓 ${college.branch_name}
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); margin-bottom: var(--sp-3); font-size: var(--text-sm);">
+            <div class="college-detail" style="margin:0;">
+              🎓 ${college.branch_name}
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              📍 ${college.district || "-"}
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              📊 Predicted: <strong>${college.weighted_cutoff || "-"}</strong>
+            </div>
+
+            <div class="college-detail" style="margin:0;">
+              ⭐ Chance: <strong>${college.chance_score || "-"}%</strong>
+            </div>
           </div>
 
-          <div class="college-detail">
-            📍 ${college.district || "-"}
+          <div style="display: flex; gap: 6px; margin-top: var(--sp-3);">
+            <button
+              class="secondary-btn"
+              onclick="moveUp(${index})"
+              style="margin:0; flex:1; min-height: 38px; height: 38px; padding: 0; font-size: var(--text-xs);"
+            >
+              ▲ Move Up
+            </button>
+
+            <button
+              class="secondary-btn"
+              onclick="moveDown(${index})"
+              style="margin:0; flex:1; min-height: 38px; height: 38px; padding: 0; font-size: var(--text-xs);"
+            >
+              ▼ Move Down
+            </button>
+
+            <button
+              class="danger-btn"
+              onclick="removeCollege(${index})"
+              style="margin:0; flex:1; min-height: 38px; height: 38px; padding: 0; font-size: var(--text-xs);"
+            >
+              Remove
+            </button>
           </div>
-
-          <div class="college-detail">
-            📊 Predicted cutoff:
-            <strong>${college.weighted_cutoff || "-"}</strong>
-          </div>
-
-          <div class="college-detail">
-            ⭐ Chance score:
-            <strong>${college.chance_score || "-"}%</strong>
-          </div>
-
-          <button
-            class="secondary-btn"
-            onclick="moveUp(${index})"
-          >
-            ↑ Move Up
-          </button>
-
-          <button
-            class="secondary-btn"
-            onclick="moveDown(${index})"
-          >
-            ↓ Move Down
-          </button>
-
-          <button
-            class="danger-btn"
-            onclick="removeCollege(${index})"
-          >
-            Remove
-          </button>
 
         </div>
       `;
@@ -173,9 +184,9 @@
       </div>
 
       <div class="disclaimer-box">
-        <strong>Note:</strong>
-        This option form is only for personal planning.
-        Final CAP option form must be filled on the official admission portal.
+        <strong>⚠️ Crucial Admission Note:</strong>
+        This priority form is a simulation tool for CAP Option Form planning.
+        You must manually log in and enter these choice codes on the official Maharashtra DTE CAP portal when rounds open.
       </div>
     `;
 

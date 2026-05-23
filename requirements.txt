@@ -13,3 +13,4 @@ thefuzz
 python-levenshtein
 tqdm
 python-dotenv
+firebase-admin

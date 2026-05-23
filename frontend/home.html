@@ -6,7 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home - CETSure</title>
 
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/design-system.css" />
+
 </head>
 
 <body>
@@ -17,9 +23,9 @@
 
             <div class="top-bar">
                 <div>
-                    <h1 style="margin-bottom:4px;">CETSure</h1>
-                    <p class="subtitle" style="margin:0;">
-                        Welcome back
+                    <h1 class="gradient-text" style="margin-bottom: 2px; text-align: left;">CETSure</h1>
+                    <p class="subtitle" style="margin: 0; text-align: left; font-size: var(--text-xs); color: var(--c-text-muted);">
+                        Official CAP Round Navigator
                     </p>
                 </div>
 
@@ -28,8 +34,10 @@
                 </button>
             </div>
 
-            <div id="profileBox"></div>
+            <!-- Welcoming dynamic greeting box -->
+            <div id="profileBox" style="text-align: left; margin-bottom: var(--sp-4);"></div>
 
+            <!-- High Fidelity Stats KPI Cards -->
             <div class="stats-grid">
 
                 <div class="stat-box">
@@ -48,7 +56,7 @@
                     </div>
 
                     <div class="stat-label">
-                        Shortlisted
+                        Saved
                     </div>
                 </div>
 
@@ -58,40 +66,57 @@
                     </div>
 
                     <div class="stat-label">
-                        Predictions
+                        Matches
                     </div>
                 </div>
 
             </div>
 
-            <div class="college-card">
-
-                <div class="college-name">
-                    CAP Round Countdown
-                </div>
-
-                <div class="college-detail" id="countdownText">
+            <!-- Pulsing Urgency Banner for expected CAP admission rounds -->
+            <div class="countdown-card">
+                <div class="pulse-dot"></div>
+                <div class="countdown-content" id="countdownText">
                     Loading countdown...
                 </div>
-
             </div>
 
-            <div class="results-section">
+            <!-- EdTech Dashboard Action Cards -->
+            <h2 class="section-title" style="margin-top: var(--sp-6); margin-bottom: var(--sp-3); font-size: var(--text-md);">Navigation Center</h2>
+            
+            <div class="dashboard-actions-grid">
+                
+                <div class="action-card" onclick="goTo(ROUTES.PREDICT)" style="background: linear-gradient(135deg, var(--c-primary-surf) 0%, #FFFFFF 100%); border-color: var(--c-primary-border);">
+                    <div class="action-card-icon" style="background: var(--c-primary); color: #FFF; width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">🎯</div>
+                    <div>
+                        <div class="action-card-title" style="color: var(--c-primary);">Predict Colleges</div>
+                        <div class="action-card-subtitle">Match MHT-CET cutoffs</div>
+                    </div>
+                </div>
 
-                <button class="primary-btn" onclick="goTo(ROUTES.PREDICT)">
-                    Predict Colleges
-                </button>
+                <div class="action-card" onclick="goTo('search.html')">
+                    <div class="action-card-icon" style="background: var(--c-surface-alt); border: 1px solid var(--c-border); width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">🔍</div>
+                    <div>
+                        <div class="action-card-title">Search Cutoffs</div>
+                        <div class="action-card-subtitle">Search codes &amp; locations</div>
+                    </div>
+                </div>
 
-                <button class="secondary-btn" onclick="goTo('search.html')">
-                    Search Colleges
-                </button>
+                <div class="action-card" onclick="goTo('shortlist.html')">
+                    <div class="action-card-icon" style="background: var(--c-surface-alt); border: 1px solid var(--c-border); width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">❤️</div>
+                    <div>
+                        <div class="action-card-title">Option Shortlist</div>
+                        <div class="action-card-subtitle">Plan priority order</div>
+                    </div>
+                </div>
 
-                <button class="secondary-btn" onclick="goTo('shortlist.html')">
-                    My Shortlist
-                </button>
-                <button class="secondary-btn" onclick="goTo('compare.html')">
-                    Compare Colleges
-                </button>
+                <div class="action-card" onclick="goTo('compare.html')">
+                    <div class="action-card-icon" style="background: var(--c-surface-alt); border: 1px solid var(--c-border); width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">📊</div>
+                    <div>
+                        <div class="action-card-title">Compare Options</div>
+                        <div class="action-card-subtitle">Side-by-side cutoff check</div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
