@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search Colleges - CETSure</title>
+  <meta name="description" content="Search Maharashtra engineering colleges by name or DTE code. Look up official cutoff data for CAP admissions." />
+  <meta name="theme-color" content="#0D53FC" />
+  <title>Search Colleges — CETSure | Smart CAP College Predictor</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,10 +39,10 @@
 
       <div style="font-size: 11px; margin-bottom: var(--sp-5); display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
         <span style="color: var(--c-text-muted);">Try:</span>
-        <span onclick="document.getElementById('searchInput').value='COEP'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">COEP</span>
-        <span onclick="document.getElementById('searchInput').value='VJTI'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">VJTI</span>
-        <span onclick="document.getElementById('searchInput').value='PICT'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">PICT</span>
-        <span onclick="document.getElementById('searchInput').value='6006'; handleSearch();" style="color: var(--c-primary); cursor: pointer; font-weight: var(--fw-semibold); background: var(--c-primary-surf); padding: 2px 8px; border-radius: var(--r-sm);">Code 6006</span>
+        <span class="search-tag" onclick="document.getElementById('searchInput').value='COEP'; handleSearch();">COEP</span>
+        <span class="search-tag" onclick="document.getElementById('searchInput').value='VJTI'; handleSearch();">VJTI</span>
+        <span class="search-tag" onclick="document.getElementById('searchInput').value='PICT'; handleSearch();">PICT</span>
+        <span class="search-tag" onclick="document.getElementById('searchInput').value='6006'; handleSearch();">Code 6006</span>
       </div>
 
       <button class="primary-btn" onclick="handleSearch()" style="margin-top: 0;">

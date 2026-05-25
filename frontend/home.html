@@ -4,13 +4,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - CETSure</title>
+    <meta name="description"
+        content="Your CETSure dashboard — track your MHT-CET percentile, shortlisted colleges, and CAP round countdown in one place." />
+    <meta name="theme-color" content="#0D53FC" />
+    <title>Dashboard — CETSure | Smart CAP College Predictor</title>
 
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="preconnect" href="https://api.fontshare.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="css/design-system.css" />
 
 </head>
@@ -24,7 +29,8 @@
             <div class="top-bar">
                 <div>
                     <h1 class="gradient-text" style="margin-bottom: 2px; text-align: left;">CETSure</h1>
-                    <p class="subtitle" style="margin: 0; text-align: left; font-size: var(--text-xs); color: var(--c-text-muted);">
+                    <p class="subtitle"
+                        style="margin: 0; text-align: left; font-size: var(--text-xs); color: var(--c-text-muted);">
                         Official CAP Round Navigator
                     </p>
                 </div>
@@ -81,36 +87,39 @@
             </div>
 
             <!-- EdTech Dashboard Action Cards -->
-            <h2 class="section-title" style="margin-top: var(--sp-6); margin-bottom: var(--sp-3); font-size: var(--text-md);">Navigation Center</h2>
-            
+            <h2 class="section-title"
+                style="margin-top: var(--sp-6); margin-bottom: var(--sp-3); font-size: var(--text-md);">Navigation
+                Center</h2>
+
             <div class="dashboard-actions-grid">
-                
-                <div class="action-card" onclick="goTo(ROUTES.PREDICT)" style="background: linear-gradient(135deg, var(--c-primary-surf) 0%, #FFFFFF 100%); border-color: var(--c-primary-border);">
-                    <div class="action-card-icon" style="background: var(--c-primary); color: #FFF; width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">🎯</div>
+
+                <div class="action-card fade-up-1" onclick="goTo(ROUTES.PREDICT)"
+                    style="background: linear-gradient(135deg, var(--c-primary-surf) 0%, #FFFFFF 100%); border-color: var(--c-primary-border);">
+                    <div class="action-icon-box primary">🎯</div>
                     <div>
                         <div class="action-card-title" style="color: var(--c-primary);">Predict Colleges</div>
                         <div class="action-card-subtitle">Match MHT-CET cutoffs</div>
                     </div>
                 </div>
 
-                <div class="action-card" onclick="goTo('search.html')">
-                    <div class="action-card-icon" style="background: var(--c-surface-alt); border: 1px solid var(--c-border); width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">🔍</div>
+                <div class="action-card fade-up-2" onclick="goTo('search.html')">
+                    <div class="action-icon-box subtle">🔍</div>
                     <div>
-                        <div class="action-card-title">Search Cutoffs</div>
+                        <div class="action-card-title">Search Colleges</div>
                         <div class="action-card-subtitle">Search codes &amp; locations</div>
                     </div>
                 </div>
 
-                <div class="action-card" onclick="goTo('shortlist.html')">
-                    <div class="action-card-icon" style="background: var(--c-surface-alt); border: 1px solid var(--c-border); width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">❤️</div>
+                <div class="action-card fade-up-3" onclick="goTo('shortlist.html')">
+                    <div class="action-icon-box subtle">❤️</div>
                     <div>
                         <div class="action-card-title">Option Shortlist</div>
                         <div class="action-card-subtitle">Plan priority order</div>
                     </div>
                 </div>
 
-                <div class="action-card" onclick="goTo('compare.html')">
-                    <div class="action-card-icon" style="background: var(--c-surface-alt); border: 1px solid var(--c-border); width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px;">📊</div>
+                <div class="action-card fade-up-4" onclick="goTo('compare.html')">
+                    <div class="action-icon-box subtle">📊</div>
                     <div>
                         <div class="action-card-title">Compare Options</div>
                         <div class="action-card-subtitle">Side-by-side cutoff check</div>

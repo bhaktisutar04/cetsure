@@ -1083,3 +1083,196 @@ select {
   margin-bottom: 20px;
   font-weight: 500;
 }
+
+/* ============================================================
+   SKELETON SHIMMER LOADING
+   ============================================================ */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--c-surface-alt) 25%, #E8EDF5 50%, var(--c-surface-alt) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--r-md);
+  min-height: 20px;
+}
+
+.skeleton-card {
+  background: linear-gradient(90deg, var(--c-surface-alt) 25%, #E8EDF5 50%, var(--c-surface-alt) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--r-lg);
+  min-height: 120px;
+  margin-bottom: var(--sp-4);
+}
+
+/* ============================================================
+   STAGGERED FADE-UP ANIMATION DELAYS
+   ============================================================ */
+.fade-up-1 { animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+.fade-up-2 { animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.10s both; }
+.fade-up-3 { animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+.fade-up-4 { animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both; }
+.fade-up-5 { animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+.fade-up-6 { animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.30s both; }
+
+/* ============================================================
+   PAGE HEADER GRADIENT BAR
+   ============================================================ */
+.page-header-bar {
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-hover) 60%, var(--c-accent) 100%);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+  margin: calc(-1 * var(--sp-6)) calc(-1 * var(--sp-5)) var(--sp-5);
+  position: relative;
+}
+
+.page-header-bar h1 {
+  color: #FFFFFF;
+  text-align: left;
+  margin-bottom: 2px;
+  font-size: var(--text-xl);
+}
+
+.page-header-bar p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--text-xs);
+  margin: 0;
+}
+
+/* ============================================================
+   SEARCH TAG PILLS
+   ============================================================ */
+.search-tag {
+  color: var(--c-primary);
+  cursor: pointer;
+  font-weight: var(--fw-semibold);
+  font-size: var(--text-xs);
+  background: var(--c-primary-surf);
+  padding: 3px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  transition: all var(--ease-fast);
+  display: inline-block;
+}
+
+.search-tag:hover {
+  background: var(--c-primary-border);
+  border-color: var(--c-primary);
+  transform: translateY(-1px);
+}
+
+.search-tag:active {
+  transform: scale(0.96);
+}
+
+/* ============================================================
+   STAT BOX GLOW ON HOVER
+   ============================================================ */
+.stat-box.safe:hover {
+  border-color: var(--c-safe);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.12);
+}
+
+.stat-box.moderate:hover {
+  border-color: var(--c-moderate);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.12);
+}
+
+.stat-box.reach:hover {
+  border-color: var(--c-reach);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.12);
+}
+
+/* ============================================================
+   ENHANCED ACTION CARD ICON BOX
+   ============================================================ */
+.action-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-bottom: 10px;
+  transition: transform var(--ease-spring);
+}
+
+.action-card:hover .action-icon-box {
+  transform: scale(1.08);
+}
+
+.action-icon-box.primary {
+  background: var(--c-primary);
+  color: #FFFFFF;
+}
+
+.action-icon-box.subtle {
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
+}
+
+/* ============================================================
+   FLOATING LABEL STYLE (Visual Only)
+   ============================================================ */
+.form-help {
+  font-size: 10px;
+  color: var(--c-text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   RESPONSIVE — VERY SMALL SCREENS (320px)
+   ============================================================ */
+@media (max-width: 359px) {
+  :root {
+    --text-base: 14px;
+    --text-lg: 16px;
+    --text-xl: 18px;
+    --text-2xl: 22px;
+  }
+
+  body {
+    padding: var(--sp-4) var(--sp-3) calc(var(--navbar-h) + var(--sp-8));
+  }
+
+  .card {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-2);
+  }
+
+  .stat-number {
+    font-size: var(--text-lg);
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .bottom-navbar button {
+    min-width: 56px;
+    padding: var(--sp-2) var(--sp-1);
+  }
+
+  .bottom-navbar button span {
+    font-size: 9px;
+  }
+
+  .action-card {
+    min-height: 96px;
+    padding: var(--sp-3);
+  }
+
+  .action-card-title {
+    font-size: var(--text-sm);
+  }
+}

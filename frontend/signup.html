@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - CETSure</title>
+  <meta name="description" content="Sign in to CETSure with Google to predict your Maharashtra engineering college admissions and save your CAP option form shortlist." />
+  <meta name="theme-color" content="#0D53FC" />
+  <title>Login — CETSure | Smart CAP College Predictor</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,22 +20,25 @@
 <body>
 
   <div class="container">
-    <div class="card fade-up" style="text-align: center;">
+    <div class="card fade-up" style="text-align: center; overflow: hidden; position: relative;">
+
+      <!-- Decorative gradient orb -->
+      <div style="position: absolute; top: -50px; left: -50px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(13, 83, 252, 0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
 
       <img
           src="assets/logo.svg"
           alt="CETSure Logo"
           class="logo"
-          style="filter: drop-shadow(0 4px 12px rgba(13, 83, 252, 0.15)); margin-bottom: var(--sp-6);"
+          style="filter: drop-shadow(0 4px 12px rgba(13, 83, 252, 0.15)); margin-bottom: var(--sp-6); height: 52px;"
       />
 
-      <h1 class="gradient-text">Welcome to CETSure</h1>
+      <h1 class="gradient-text" style="position: relative;">Welcome to CETSure</h1>
 
-      <p class="subtitle" style="margin-bottom: var(--sp-6);">
+      <p class="subtitle fade-up-1" style="margin-bottom: var(--sp-6); position: relative;">
         Securely sign in with Google to predict colleges and save your CAP option form shortlist.
       </p>
 
-      <button class="google-btn" onclick="signInWithGoogle()" style="margin-top: var(--sp-4);">
+      <button class="google-btn fade-up-2" onclick="signInWithGoogle()" style="margin-top: var(--sp-4); position: relative;">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -42,7 +48,7 @@
         Continue with Google
       </button>
 
-      <div class="disclaimer-box" style="margin-top: var(--sp-6); font-size: var(--text-xs); text-align: left;">
+      <div class="disclaimer-box fade-up-3" style="margin-top: var(--sp-6); font-size: var(--text-xs); text-align: left; position: relative;">
         🔒 <strong>Data Privacy Guarantee:</strong> We only access your basic profile (name and email) to save your list. We never post anything or share your details.
       </div>
 

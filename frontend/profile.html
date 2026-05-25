@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Set up your CETSure profile — enter your MHT-CET percentile, category, and name to get personalized college predictions." />
+    <meta name="theme-color" content="#0D53FC" />
+    <title>Profile Setup — CETSure | Smart CAP College Predictor</title>
 
-    <title>Profile Setup - CETSure</title>
-
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="preconnect" href="https://api.fontshare.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,14 +46,14 @@
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="fullName" placeholder="Enter your full name" required />
-                    <p style="font-size: 10px; color: var(--c-text-muted); margin-top: 4px;">Used for personalizing your dashboard and forms.</p>
+                    <p class="form-help">Used for personalizing your dashboard and forms.</p>
                 </div>
 
                 <div class="form-group">
                     <label>MHT-CET Percentile</label>
                     <input type="number" id="percentile" placeholder="Enter your percentile" min="0" max="100"
                         step="0.01" required />
-                    <p style="font-size: 10px; color: var(--c-text-muted); margin-top: 4px;">Enter exact percentile up to 2 decimal places (e.g., 98.45).</p>
+                    <p class="form-help">Enter exact percentile up to 2 decimal places (e.g., 98.45).</p>
                 </div>
 
                 <div class="form-group">
@@ -69,7 +71,7 @@
                         <option value="GSEBCS">SEBC</option>
                         <option value="EWS">EWS</option>
                     </select>
-                    <p style="font-size: 10px; color: var(--c-text-muted); margin-top: 4px;">Reservation categories have lower cutoffs than GOPENS (Open General).</p>
+                    <p class="form-help">Reservation categories have lower cutoffs than GOPENS (Open General).</p>
                 </div>
 
                 <button type="submit" class="btn">
