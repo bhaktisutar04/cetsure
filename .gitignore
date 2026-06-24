@@ -6,7 +6,9 @@ backend/data_pipeline/raw_pdfs/
 backend/data_pipeline/extracted/
 backend/data_pipeline/cleaned/
 backend/data_pipeline/logs/
-
+backend/data_cleaning/
+backend/data_pipeline/
+backend/evaluation/
 # Python cache
 __pycache__/
 *.pyc
