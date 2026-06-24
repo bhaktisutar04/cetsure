@@ -108,6 +108,16 @@
                     <p class="form-help">Limit results to a specific region or view statewide choices.</p>
                 </div>
 
+                <div class="form-group" style="margin-bottom: var(--sp-6);">
+                    <label>CAP Round</label>
+                    <select id="cap_round">
+                        <option value="1">CAP Round 1 — First allotment (highest cutoffs)</option>
+                        <option value="2">CAP Round 2 — Second allotment (slightly lower cutoffs)</option>
+                        <option value="3">CAP Round 3 — Final allotment (lowest cutoffs)</option>
+                    </select>
+                    <p class="form-help">Select the CAP round you want to predict for. Round 1 is the most competitive.</p>
+                </div>
+
                 <button type="submit" id="predictBtn" class="primary-btn">
                     Find Matches &rarr;
                 </button>
@@ -159,7 +169,8 @@
                     percentile: profile.percentile,
                     category: profile.category,
                     branch: document.getElementById("branch").value,
-                    district: document.getElementById("district").value
+                    district: document.getElementById("district").value,
+                    cap_round: parseInt(document.getElementById("cap_round").value)
                 };
 
                 const results = await predictColleges(payload);

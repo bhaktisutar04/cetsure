@@ -32,7 +32,7 @@
       <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">Your Predictions
       </h1>
       <div class="prediction-note" style="text-align: center;">
-        CETSure predicts CAP Round 1 chances using previous CAP Round 1 cutoff trends.
+        CETSure predicts CAP Round <span id="capRoundLabel">1</span> chances using previous CAP Round cutoff trends.
       </div>
 
       <div id="metaInfo" class="subtitle"
@@ -92,10 +92,12 @@
     document.getElementById("moderateCount").innerText = moderate.length;
     document.getElementById("reachCount").innerText = reach.length;
 
+    document.getElementById("capRoundLabel").innerText = results.meta.cap_round || 1;
+
     document.getElementById("metaInfo").innerHTML = `
     <strong>${results.meta.branch}</strong><br>
     ${results.meta.category} • ${results.meta.percentile} percentile • 
-    ${results.meta.district || "All Maharashtra"}
+    ${results.meta.district || "All Maharashtra"} • CAP Round ${results.meta.cap_round || 1}
   `;
 
     const resultsContainer = document.getElementById("resultsContainer");
@@ -200,7 +202,7 @@
             </div>
 
             <div class="college-detail" style="margin:0;">
-              📈 Trend: <strong>${college.trend}</strong>
+              📈 Trend: <strong>${college.trend === 'INSUFFICIENT_DATA' ? '—' : college.trend}</strong>
             </div>
           </div>
 
