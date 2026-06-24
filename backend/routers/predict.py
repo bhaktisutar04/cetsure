@@ -25,6 +25,7 @@ async def get_prediction(req: PredictRequest, current_user: dict = Depends(get_c
             branch=req.branch,
             district=req.district,
             quota=req.quota,
+            cap_round=req.cap_round,
         )
         return res
     except ValueError as ve:

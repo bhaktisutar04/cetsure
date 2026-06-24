@@ -56,6 +56,7 @@ class PredictRequest(BaseModel):
     branch: str
     district: Optional[str] = None
     quota: str = "MH"
+    cap_round: int = Field(1, ge=1, le=3)
 
 
 class CollegePrediction(BaseModel):
@@ -85,6 +86,7 @@ class PredictionMeta(BaseModel):
     branch: str
     district: Optional[str] = None
     quota: str = "MH"
+    cap_round: int = 1
     total_colleges: int
 
 

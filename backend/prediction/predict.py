@@ -91,6 +91,7 @@ def fetch_cutoff_data(
     branch: str,
     quota: str = "MH",
     district: str | None = None,
+    cap_round: int = 1,
     engine=None,
 ) -> list[dict]:
     if engine is None:
@@ -101,6 +102,7 @@ def fetch_cutoff_data(
     params = {
         "category": category.strip(),
         "quota": quota.strip(),
+        "cap_round": cap_round,
     }
 
     if branch_lower in ("other", "all branches", "all"):
@@ -149,7 +151,7 @@ def fetch_cutoff_data(
             ON c.college_code = cl.college_code
         WHERE c.category = :category
           AND c.quota = :quota
-          AND c.cap_round = 1
+          AND c.cap_round = :cap_round
           AND c.closing_percentile IS NOT NULL
           {branch_condition}
           {district_condition}
@@ -286,6 +288,7 @@ def predict(
     branch: str,
     district: str | None = None,
     quota: str = "MH",
+    cap_round: int = 1,
 ) -> dict:
     if percentile < 0 or percentile > 100:
         raise ValueError(f"Percentile must be between 0 and 100, got {percentile}")
@@ -295,6 +298,7 @@ def predict(
         branch=branch,
         quota=quota,
         district=district,
+        cap_round=cap_round,
     )
 
     college_groups = _group_by_college(rows)
@@ -355,6 +359,7 @@ def predict(
             "branch": branch,
             "district": district,
             "quota": quota,
+            "cap_round": cap_round,
             "total_colleges": total_colleges,
         },
     }
