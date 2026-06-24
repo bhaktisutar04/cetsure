@@ -2,177 +2,189 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Compare your shortlisted Maharashtra engineering colleges side by side — cutoff predictions, chance scores, and branch details." />
-    <meta name="theme-color" content="#0D53FC" />
-    <title>Compare Colleges — CETSure | Smart CAP College Predictor</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="preconnect" href="https://api.fontshare.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/design-system.css" />
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Compare your shortlisted Maharashtra engineering colleges side by side — cutoff predictions, chance scores, and branch details." />
+  <meta name="theme-color" content="#0D53FC" />
+  <title>Compare Colleges — CETSure | Smart CAP College Predictor</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/design-system.css" />
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="card fade-up">
+  <div class="container">
+    <div class="card fade-up">
 
-            <button class="secondary-btn" onclick="goTo('shortlist.html')" style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
-                &larr; Back to Shortlist
-            </button>
+      <button class="secondary-btn" onclick="goTo('shortlist.html')"
+        style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+        &larr; Back to Shortlist
+      </button>
 
-            <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">Compare Colleges</h1>
+      <h1 class="gradient-text" style="display: block; text-align: center; margin-top: var(--sp-4);">Compare Colleges
+      </h1>
 
-            <p class="subtitle" style="font-size: var(--text-sm); margin-bottom: var(--sp-6);">
-                Compare your saved options side by side to finalize priority choices.
-            </p>
+      <p class="subtitle" style="font-size: var(--text-sm); margin-bottom: var(--sp-6);">
+        Compare your saved options side by side to finalize priority choices.
+      </p>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-4);">
-                <div class="form-group" style="margin: 0;">
-                    <label>First College Choice</label>
-                    <select id="collegeOne" style="min-height: 48px; padding: 12px;"></select>
-                </div>
-
-                <div class="form-group" style="margin: 0;">
-                    <label>Second College Choice</label>
-                    <select id="collegeTwo" style="min-height: 48px; padding: 12px;"></select>
-                </div>
-            </div>
-
-            <button class="primary-btn" onclick="compareColleges()" style="margin-top: var(--sp-2);">
-                Compare Choices &rarr;
-            </button>
-
-            <div id="comparisonResult" class="results-section"></div>
-
-        </div>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-    <script src="js/config.js"></script>
-    <script src="js/firebase.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/app.js"></script>
-
-    <script>
-        requireAuth();
-
-        const shortlist =
-            JSON.parse(localStorage.getItem(getShortlistKey())) || [];
-
-        const collegeOne = document.getElementById("collegeOne");
-        const collegeTwo = document.getElementById("collegeTwo");
-
-        function loadOptions() {
-            if (shortlist.length < 2) {
-                document.getElementById("comparisonResult").innerHTML = `
-        <div class="empty-state">
-          Save at least 2 colleges to compare.
-        </div>
-      `;
-                return;
-            }
-
-            shortlist.forEach((college, index) => {
-                const optionText =
-                    `${college.college_name} - ${college.branch_name}`;
-
-                collegeOne.innerHTML += `
-        <option value="${index}">
-          ${optionText}
-        </option>
-      `;
-
-                collegeTwo.innerHTML += `
-        <option value="${index}">
-          ${optionText}
-        </option>
-      `;
-            });
-
-            collegeTwo.value = shortlist.length > 1 ? 1 : 0;
-        }
-
-        function compareColleges() {
-            const firstIndex = collegeOne.value;
-            const secondIndex = collegeTwo.value;
-
-            if (firstIndex === secondIndex) {
-                showMessage("Please select two different colleges.");
-                return;
-            }
-
-            const first = shortlist[firstIndex];
-            const second = shortlist[secondIndex];
-
-            document.getElementById("comparisonResult").innerHTML = `
-      <div class="stats-grid" style="grid-template-columns: 1fr; margin-top: var(--sp-6);">
-
-        <div class="college-card fade-up" style="border-left: 5px solid var(--c-primary); padding: var(--sp-5);">
-          <span class="badge safe" style="background: var(--c-primary-surf); color: var(--c-primary); border-color: var(--c-primary-border);">
-            Option A
-          </span>
-
-          <div class="college-name" style="font-size: var(--text-md); margin-bottom: var(--sp-4);">
-            ${first.college_name}
-          </div>
-
-          <div class="college-detail">
-            🎓 Branch: <strong style="color: var(--c-text);">${first.branch_name}</strong>
-          </div>
-
-          <div class="college-detail">
-            📍 District: <strong style="color: var(--c-text);">${first.district || "-"}</strong>
-          </div>
-
-          <div class="college-detail">
-            📊 Predicted Cutoff: <strong style="color: var(--c-primary);">${first.weighted_cutoff || "-"}</strong>
-          </div>
-
-          <div class="college-detail">
-            ⭐ Match Chance: <strong style="color: var(--c-safe-text);">${first.chance_score || "-"}%</strong>
-          </div>
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-4);">
+        <div class="form-group" style="margin: 0;">
+          <label>First College Choice</label>
+          <select id="collegeOne" style="min-height: 48px; padding: 12px;"></select>
         </div>
 
-        <div class="college-card fade-up" style="border-left: 5px solid var(--c-accent); padding: var(--sp-5);">
-          <span class="badge moderate" style="background: var(--c-accent-surf); color: var(--c-accent-hover); border-color: var(--c-accent-border);">
-            Option B
-          </span>
-
-          <div class="college-name" style="font-size: var(--text-md); margin-bottom: var(--sp-4);">
-            ${second.college_name}
-          </div>
-
-          <div class="college-detail">
-            🎓 Branch: <strong style="color: var(--c-text);">${second.branch_name}</strong>
-          </div>
-
-          <div class="college-detail">
-            📍 District: <strong style="color: var(--c-text);">${second.district || "-"}</strong>
-          </div>
-
-          <div class="college-detail">
-            📊 Predicted Cutoff: <strong style="color: var(--c-primary);">${second.weighted_cutoff || "-"}</strong>
-          </div>
-
-          <div class="college-detail">
-            ⭐ Match Chance: <strong style="color: var(--c-safe-text);">${second.chance_score || "-"}%</strong>
-          </div>
+        <div class="form-group" style="margin: 0;">
+          <label>Second College Choice</label>
+          <select id="collegeTwo" style="min-height: 48px; padding: 12px;"></select>
         </div>
-
       </div>
-    `;
-        }
 
-        loadOptions();
-    </script>
+      <button class="primary-btn" onclick="compareColleges()" style="margin-top: var(--sp-2);">
+        Compare Choices &rarr;
+      </button>
+
+      <div id="comparisonResult" class="results-section"></div>
+
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    requireAuth();
+
+    const shortlist =
+      JSON.parse(localStorage.getItem(getShortlistKey())) || [];
+
+    const collegeOne = document.getElementById("collegeOne");
+    const collegeTwo = document.getElementById("collegeTwo");
+
+    function loadOptions() {
+      if (shortlist.length < 2) {
+        document.getElementById("comparisonResult").innerHTML = `
+                <div class="empty-state">
+                  Save at least 2 colleges to compare.
+                </div>
+              `;
+        return;
+      }
+
+      shortlist.forEach((college, index) => {
+        const optionText = `${college.college_name} - ${college.branch_name}`;
+
+        collegeOne.innerHTML += `<option value="${index}">${optionText}</option>`;
+        collegeTwo.innerHTML += `<option value="${index}">${optionText}</option>`;
+      });
+
+      collegeTwo.value = shortlist.length > 1 ? 1 : 0;
+    }
+
+    function compareColleges() {
+      const firstIndex = collegeOne.value;
+      const secondIndex = collegeTwo.value;
+
+      if (firstIndex === secondIndex) {
+        showMessage("Please select two different colleges.");
+        return;
+      }
+
+      const first = shortlist[firstIndex];
+      const second = shortlist[secondIndex];
+
+      document.getElementById("comparisonResult").innerHTML = `
+              <div class="stats-grid" style="grid-template-columns: 1fr; margin-top: var(--sp-6);">
+
+                <div class="college-card fade-up" style="border-left: 5px solid var(--c-primary); padding: var(--sp-5);">
+                  <span class="badge safe" style="background: var(--c-primary-surf); color: var(--c-primary); border-color: var(--c-primary-border);">
+                    Option A
+                  </span>
+
+                  <div class="college-name" style="font-size: var(--text-md); margin-bottom: var(--sp-4);">
+                    ${first.college_name}
+                  </div>
+
+                  <div class="college-detail">
+                    🎓 Branch: <strong style="color: var(--c-text);">${first.branch_name}</strong>
+                  </div>
+
+                  <div class="college-detail">
+                    📍 District: <strong style="color: var(--c-text);">${first.district || "-"}</strong>
+                  </div>
+
+                  <div class="college-detail">
+                    📊 Predicted Cutoff: <strong style="color: var(--c-primary);">${first.weighted_cutoff || "-"}</strong>
+                  </div>
+
+                  <div class="college-detail">
+                    ⭐ Match Chance: <strong style="color: var(--c-safe-text);">${first.chance_score || "-"}%</strong>
+                  </div>
+
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((first.college_name || '') + ' ' + (first.district || '') + ' Maharashtra')}"
+                    target="_blank"
+                    class="secondary-btn"
+                    style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin-top: var(--sp-3); min-height:40px; padding: 8px var(--sp-4); font-size: var(--text-xs); text-decoration:none; width:100%;"
+                  >
+                    🗺️ View on Maps
+                  </a>
+                </div>
+
+                <div class="college-card fade-up" style="border-left: 5px solid var(--c-accent); padding: var(--sp-5);">
+                  <span class="badge moderate" style="background: var(--c-accent-surf); color: var(--c-accent-hover); border-color: var(--c-accent-border);">
+                    Option B
+                  </span>
+
+                  <div class="college-name" style="font-size: var(--text-md); margin-bottom: var(--sp-4);">
+                    ${second.college_name}
+                  </div>
+
+                  <div class="college-detail">
+                    🎓 Branch: <strong style="color: var(--c-text);">${second.branch_name}</strong>
+                  </div>
+
+                  <div class="college-detail">
+                    📍 District: <strong style="color: var(--c-text);">${second.district || "-"}</strong>
+                  </div>
+
+                  <div class="college-detail">
+                    📊 Predicted Cutoff: <strong style="color: var(--c-primary);">${second.weighted_cutoff || "-"}</strong>
+                  </div>
+
+                  <div class="college-detail">
+                    ⭐ Match Chance: <strong style="color: var(--c-safe-text);">${second.chance_score || "-"}%</strong>
+                  </div>
+
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((second.college_name || '') + ' ' + (second.district || '') + ' Maharashtra')}"
+                    target="_blank"
+                    class="secondary-btn"
+                    style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin-top: var(--sp-3); min-height:40px; padding: 8px var(--sp-4); font-size: var(--text-xs); text-decoration:none; width:100%;"
+                  >
+                    🗺️ View on Maps
+                  </a>
+                </div>
+
+              </div>
+            `;
+    }
+
+    loadOptions();
+  </script>
 
 </body>
 
