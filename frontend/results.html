@@ -211,6 +211,15 @@
               Save List
             </button>
 
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(college.college_name + ' ' + (college.district || '') + ' Maharashtra')}"
+              target="_blank"
+              class="secondary-btn"
+              style="margin:0; flex:1; min-height: 44px; padding: 10px var(--sp-2); font-size: var(--text-xs); display:flex; align-items:center; justify-content:center; text-decoration:none;"
+            >
+              🗺️ Maps
+            </a>
+
             <button
               class="secondary-btn"
               onclick="openCollegeDetails('${college.college_code}')"
