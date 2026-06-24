@@ -30,9 +30,15 @@
 
       <p class="subtitle" id="collegeCode" style="margin-bottom: var(--sp-4); font-size: var(--text-sm);"></p>
 
-      <button class="primary-btn" onclick="saveCollegeFromDetails()" style="margin-top: 0; margin-bottom: var(--sp-5);">
-        ❤️ Save to Shortlist
-      </button>
+      <div style="display:flex; gap: var(--sp-2); margin-bottom: var(--sp-5);">
+        <button class="primary-btn" onclick="saveCollegeFromDetails()" style="margin-top: 0; margin-bottom: 0; flex:1;">
+          ❤️ Save to Shortlist
+        </button>
+        <a id="mapsBtn" href="#" target="_blank" class="secondary-btn"
+          style="margin-top:0; margin-bottom:0; flex:1; display:flex; align-items:center; justify-content:center; text-decoration:none;">
+          🗺️ View on Maps
+        </a>
+      </div>
 
       <div id="collegeDetails">
         <div class="empty-state">Loading college details...</div>
@@ -73,6 +79,10 @@
 
         document.getElementById("collegeCode").innerHTML =
           `College Code: <strong>${data.college_code}</strong>`;
+
+        const mapsQuery = encodeURIComponent(data.college_name + ' Maharashtra');
+        document.getElementById("mapsBtn").href =
+          `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 
         const cutoffs = data.cutoffs || [];
 
