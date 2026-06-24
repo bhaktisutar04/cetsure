@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Manage your CETSure college shortlist — arrange saved Maharashtra engineering colleges in priority order for your CAP option form." />
+  <meta name="description"
+    content="Manage your CETSure college shortlist — arrange saved Maharashtra engineering colleges in priority order for your CAP option form." />
   <meta name="theme-color" content="#0D53FC" />
   <title>My Shortlist — CETSure | Smart CAP College Predictor</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
@@ -12,9 +13,189 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="css/design-system.css" />
 
+  <style>
+    .choice-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-lg);
+      padding: var(--sp-4);
+      margin-bottom: var(--sp-3);
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+
+    .choice-card:hover {
+      box-shadow: 0 4px 16px rgba(13, 83, 252, 0.08);
+    }
+
+    .choice-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--c-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: var(--sp-2);
+      flex-shrink: 0;
+    }
+
+    .choice-header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-3);
+    }
+
+    .choice-college-name {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--c-text);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .choice-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-3);
+    }
+
+    .choice-pill {
+      background: var(--c-surface-alt);
+      border: 1px solid var(--c-border);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--c-text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .choice-pill strong {
+      color: var(--c-text);
+    }
+
+    .action-row {
+      display: flex;
+      gap: var(--sp-2);
+      margin-top: var(--sp-3);
+    }
+
+    .action-btn {
+      flex: 1;
+      min-height: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--c-border);
+      background: var(--c-surface-alt);
+      color: var(--c-text);
+      transition: background 0.15s, border-color 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: var(--c-border);
+    }
+
+    .action-btn.danger {
+      background: #fff0f0;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+
+    .action-btn.danger:hover {
+      background: #fee2e2;
+    }
+
+    .action-btn.maps {
+      background: var(--c-primary-surf);
+      border-color: var(--c-primary-border);
+      color: var(--c-primary);
+    }
+
+    .action-btn.maps:hover {
+      background: var(--c-primary-border);
+    }
+
+    .empty-shortlist {
+      text-align: center;
+      padding: var(--sp-10) var(--sp-4);
+      color: var(--c-text-secondary);
+    }
+
+    .empty-shortlist .empty-icon {
+      font-size: 48px;
+      margin-bottom: var(--sp-3);
+    }
+
+    .empty-shortlist p {
+      font-size: var(--text-sm);
+      margin-bottom: var(--sp-4);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-5);
+    }
+
+    .top-actions button {
+      margin: 0;
+      flex: 1;
+      min-height: 44px;
+      height: 44px;
+      font-size: var(--text-xs);
+    }
+
+    .priority-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--sp-3);
+    }
+
+    .priority-header h2 {
+      margin: 0;
+      font-size: var(--text-base);
+    }
+
+    .priority-count {
+      background: var(--c-primary-surf);
+      color: var(--c-primary);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .disclaimer-box {
+      margin-top: var(--sp-5);
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: var(--r-md);
+      padding: var(--sp-4);
+      font-size: var(--text-xs);
+      color: #92400e;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 
 <body>
@@ -22,7 +203,8 @@
   <div class="container">
     <div class="card fade-up">
 
-      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)" style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
+      <button class="secondary-btn" onclick="goTo(ROUTES.HOME)"
+        style="width: auto; min-height: auto; padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); margin-top: 0; display: inline-flex; align-self: flex-start;">
         &larr; Back Home
       </button>
 
@@ -32,13 +214,12 @@
         Arrange saved colleges in order of preference to plan your DTE option list.
       </p>
 
-      <div style="display: flex; gap: var(--sp-2); margin-top: var(--sp-4); margin-bottom: var(--sp-5);">
-        <button class="primary-btn" onclick="goTo('compare.html')" style="margin:0; flex:1; min-height:46px; height:46px; font-size:var(--text-sm);">
+      <div class="top-actions">
+        <button class="primary-btn" onclick="goTo('compare.html')">
           📊 Compare Colleges
         </button>
-
-        <button class="secondary-btn" onclick="exportPDF()" style="margin:0; flex:1; min-height:46px; height:46px; font-size:var(--text-sm);">
-          🖨️ Export PDF List
+        <button class="secondary-btn" onclick="exportPDF()">
+          🖨️ Export PDF
         </button>
       </div>
 
@@ -58,8 +239,7 @@
   <script>
     requireAuth();
 
-    const shortlistContainer =
-      document.getElementById("shortlistContainer");
+    const shortlistContainer = document.getElementById("shortlistContainer");
 
     function getShortlist() {
       return JSON.parse(localStorage.getItem(getShortlistKey())) || [];
@@ -78,26 +258,16 @@
 
     function moveUp(index) {
       if (index === 0) return;
-
       const list = getShortlist();
-
-      const temp = list[index - 1];
-      list[index - 1] = list[index];
-      list[index] = temp;
-
+      [list[index - 1], list[index]] = [list[index], list[index - 1]];
       saveShortlist(list);
       loadShortlist();
     }
 
     function moveDown(index) {
       const list = getShortlist();
-
       if (index === list.length - 1) return;
-
-      const temp = list[index + 1];
-      list[index + 1] = list[index];
-      list[index] = temp;
-
+      [list[index + 1], list[index]] = [list[index], list[index + 1]];
       saveShortlist(list);
       loadShortlist();
     }
@@ -111,87 +281,69 @@
 
       if (!saved.length) {
         shortlistContainer.innerHTML = `
-        <div class="empty-state">
-          No colleges saved to your shortlist yet. Find colleges to start planning.
-        </div>
-      `;
+          <div class="empty-shortlist">
+            <div class="empty-icon">📋</div>
+            <p>No colleges saved yet.<br>Predict your chances and save colleges to build your option form.</p>
+            <button class="primary-btn" onclick="goTo(ROUTES.PREDICT)" style="width: auto; padding: 12px 24px; min-height: auto;">
+              Start Predicting →
+            </button>
+          </div>
+        `;
         return;
       }
 
       let html = `
-      <div class="results-section" style="margin-top: 0;">
-        <h2 class="section-title" style="margin-top: 0;">Priority List (${saved.length})</h2>
-    `;
-
-      saved.forEach((college, index) => {
-        html += `
-        <div class="college-card fade-up" style="border-left: 5px solid var(--c-primary); padding: var(--sp-4);">
-
-          <span class="badge safe" style="background: var(--c-primary-surf); color: var(--c-primary); border-color: var(--c-primary-border);">
-            Choice #${index + 1}
-          </span>
-
-          <div class="college-name" style="font-size: var(--text-base); margin-bottom: var(--sp-3);">
-            ${college.college_name}
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); margin-bottom: var(--sp-3); font-size: var(--text-sm);">
-            <div class="college-detail" style="margin:0;">
-              🎓 ${college.branch_name}
-            </div>
-
-            <div class="college-detail" style="margin:0;">
-              📍 ${college.district || "-"}
-            </div>
-
-            <div class="college-detail" style="margin:0;">
-              📊 Predicted: <strong>${college.weighted_cutoff || "-"}</strong>
-            </div>
-
-            <div class="college-detail" style="margin:0;">
-              ⭐ Chance: <strong>${college.chance_score || "-"}%</strong>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 6px; margin-top: var(--sp-3);">
-            <button
-              class="secondary-btn"
-              onclick="moveUp(${index})"
-              style="margin:0; flex:1; min-height: 38px; height: 38px; padding: 0; font-size: var(--text-xs);"
-            >
-              ▲ Move Up
-            </button>
-
-            <button
-              class="secondary-btn"
-              onclick="moveDown(${index})"
-              style="margin:0; flex:1; min-height: 38px; height: 38px; padding: 0; font-size: var(--text-xs);"
-            >
-              ▼ Move Down
-            </button>
-
-            <button
-              class="danger-btn"
-              onclick="removeCollege(${index})"
-              style="margin:0; flex:1; min-height: 38px; height: 38px; padding: 0; font-size: var(--text-xs);"
-            >
-              Remove
-            </button>
-          </div>
-
+        <div class="priority-header">
+          <h2 class="section-title" style="margin:0;">Priority List</h2>
+          <span class="priority-count">${saved.length} saved</span>
         </div>
       `;
+
+      saved.forEach((college, index) => {
+        const mapsQuery = encodeURIComponent((college.college_name || '') + ' ' + (college.district || '') + ' Maharashtra');
+        const isFirst = index === 0;
+        const isLast = index === saved.length - 1;
+
+        html += `
+          <div class="choice-card">
+            <div class="choice-header">
+              <span class="choice-number">${index + 1}</span>
+              <div class="choice-college-name">${college.college_name}</div>
+            </div>
+
+            <div class="choice-meta">
+              <span class="choice-pill">🎓 ${college.branch_name}</span>
+              <span class="choice-pill">📍 ${college.district || "—"}</span>
+              ${college.weighted_cutoff ? `<span class="choice-pill">📊 Cutoff: <strong>${college.weighted_cutoff}</strong></span>` : ''}
+              ${college.chance_score ? `<span class="choice-pill">⭐ Chance: <strong>${college.chance_score}%</strong></span>` : ''}
+              ${college.bucket ? `<span class="choice-pill" style="background: var(--c-${college.bucket.toLowerCase()}-surf, var(--c-surface-alt)); color: var(--c-${college.bucket.toLowerCase()}-text, var(--c-text-secondary)); border-color: var(--c-${college.bucket.toLowerCase()}-border, var(--c-border));">${college.bucket}</span>` : ''}
+            </div>
+
+            <div class="action-row">
+              <button class="action-btn" onclick="moveUp(${index})" ${isFirst ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''}>
+                ▲ Up
+              </button>
+              <button class="action-btn" onclick="moveDown(${index})" ${isLast ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''}>
+                ▼ Down
+              </button>
+              <a href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" class="action-btn maps">
+                🗺️ Maps
+              </a>
+              <button class="action-btn danger" onclick="removeCollege(${index})">
+                🗑️ Remove
+              </button>
+            </div>
+          </div>
+        `;
       });
 
       html += `
-      </div>
-
-      <div class="disclaimer-box">
-        <strong>⚠️ Crucial Admission Note:</strong>
-        This priority form is a simulation tool for CAP Option Form planning.
-        You must manually log in and enter these choice codes on the official Maharashtra DTE CAP portal when rounds open.
-      </div>
-    `;
+        <div class="disclaimer-box">
+          <strong>⚠️ Crucial Admission Note:</strong>
+          This priority form is a simulation tool for CAP Option Form planning.
+          You must manually log in and enter these choice codes on the official Maharashtra DTE CAP portal when rounds open.
+        </div>
+      `;
 
       shortlistContainer.innerHTML = html;
     }
