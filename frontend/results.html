@@ -190,19 +190,11 @@
             </div>
 
             <div class="college-detail" style="margin:0;">
-              📊 Predicted: <strong>${college.weighted_cutoff}</strong>
-            </div>
-
-            <div class="college-detail" style="margin:0;">
               🕒 Last Year: <strong>${college.last_year_cutoff || "-"}</strong>
             </div>
 
             <div class="college-detail" style="margin:0;">
               ⭐ Chance: <strong style="color: var(--c-${bucketClassLower}-text);">${college.chance_score}%</strong>
-            </div>
-
-            <div class="college-detail" style="margin:0;">
-              📈 Trend: <strong>${college.trend === 'INSUFFICIENT_DATA' ? '—' : college.trend}</strong>
             </div>
           </div>
 
