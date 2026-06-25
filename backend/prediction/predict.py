@@ -74,14 +74,24 @@ BRANCH_ALIASES = {
 
 
 # ---------------------------------------------------------------------------
-# Database connection
+# Database connection (singleton — created once, reused across all requests)
 # ---------------------------------------------------------------------------
-def _get_engine():
-    database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        raise RuntimeError("DATABASE_URL not found. Set it in .env or environment.")
-    return create_engine(database_url)
+_engine = None
 
+def _get_engine():
+    global _engine
+    if _engine is None:
+        database_url = os.getenv("DATABASE_URL")
+        if not database_url:
+            raise RuntimeError("DATABASE_URL not found. Set it in .env or environment.")
+        _engine = create_engine(
+            database_url,
+            pool_size=5,
+            max_overflow=10,
+            pool_timeout=30,
+            pool_pre_ping=True,
+        )
+    return _engine
 
 # ---------------------------------------------------------------------------
 # Database query

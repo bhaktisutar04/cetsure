@@ -8,6 +8,7 @@ and historical database queries into structured JSON endpoints.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.routers import predict, college
+import os
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -19,14 +20,19 @@ app = FastAPI(
 # ---------------------------------------------------------------------------
 # CORS Configuration
 # ---------------------------------------------------------------------------
+# NEW
+
+ALLOWED_ORIGINS = [
+    os.getenv("FRONTEND_URL", "http://localhost:5500"),  # fallback for local dev
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["POST", "GET"],
     allow_headers=["Content-Type", "Authorization"],
 )
-
 # ---------------------------------------------------------------------------
 # Routers registration
 # ---------------------------------------------------------------------------
