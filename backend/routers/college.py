@@ -7,7 +7,8 @@ from sqlalchemy import text
 from backend.schemas.college import CollegeDetailResponse, CollegeSearchResponse, CutoffDetail, CollegeSearchResult
 from backend.prediction.predict import _get_engine
 from backend.auth.firebase_auth import get_current_user
-
+import logging
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["college"])
 
 
@@ -64,9 +65,10 @@ async def get_college_details(college_code: str, current_user: dict = Depends(ge
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"College error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database error while fetching college: {str(e)}",
+            detail="Something went wrong. Please try again.",
         )
 
 
@@ -108,7 +110,8 @@ async def search_colleges(
         return CollegeSearchResponse(results=results)
         
     except Exception as e:
+        logger.error(f"College error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database error while searching colleges: {str(e)}",
+            detail="Something went wrong. Please try again.",
         )

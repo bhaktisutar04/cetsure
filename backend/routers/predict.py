@@ -6,7 +6,8 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from backend.schemas.predict import PredictRequest, PredictResponse
 from backend.prediction.predict import predict
 from backend.auth.firebase_auth import get_current_user
-
+import logging
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["prediction"])
 
 
@@ -34,8 +35,8 @@ async def get_prediction(req: PredictRequest, current_user: dict = Depends(get_c
             detail=str(ve),
         )
     except Exception as e:
-        # Provide clean logging or detail
+        logger.error(f"Prediction error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database prediction error: {str(e)}",
+            detail="Something went wrong. Please try again.",
         )
